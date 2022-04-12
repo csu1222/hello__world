@@ -1,0 +1,11 @@
+@ 용어: 
+git init : initialize repository
+.git : git repository
+git status : working tree status
+git add : add to stageing Area
+git commit : create version
+git log: show version
+
+CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
+git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
+이것을 repository(저장소) 라고 합니다.
