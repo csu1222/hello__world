@@ -4,8 +4,24 @@ git init : initialize repository
 git status : working tree status
 git add : add to stageing Area
 git commit : create version
+git commit -m : create version commit message on commad line
+git commit -am : create version before add tracked file
 git log: show version
+git log --stat : show version with file list
+git diff : show changes
+git log -p : show version and diffent
+git check out : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다
+git stash : 현재 Staging 영역에 있는 파일의 변경사항을 스택에 넣어둡니다. 
+git  stash pop : stash 명령어로 스택에 넣어둔 변경 사항을 적용하고, 스택에서 제거하여줍니다.
+git reset --hard: delete version
+git revert : revert version not delete 위 부터 순차적으로 리버트 해야한다
+.gitignore : 파일의 이름을 적으면 그 파일을 버전관리에서 제외 한다
 
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
 이것을 repository(저장소) 라고 합니다.
+
+diff tool  차이비교 툴
+branch 
+tag 커밋 id 대신 이름붙이는것
+backup
