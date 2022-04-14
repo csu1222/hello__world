@@ -10,12 +10,19 @@ git log: show version
 git log --stat : show version with file list
 git diff : show changes
 git log -p : show version and diffent
-git check out : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다
+git checkout : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다, 브랜치도 checkout "브랜치 이름" 으로 이동한다
 git stash : 현재 Staging 영역에 있는 파일의 변경사항을 스택에 넣어둡니다. 
 git  stash pop : stash 명령어로 스택에 넣어둔 변경 사항을 적용하고, 스택에서 제거하여줍니다.
 git reset --hard: delete version
 git revert : revert version not delete 위 부터 순차적으로 리버트 해야한다
 .gitignore : 파일의 이름을 적으면 그 파일을 버전관리에서 제외 한다
+git log --all --graph --oneline :깃로그를 모든 브랜치를 표시, 그래프로, 한줄로 표시한다
+git branch : show branch list
+git branch "new branch name" : make new branch
+merge commit: 각자 다른 브랜치를 병합
+git merge "병합할 branch" : 현재 브랜치에 입력한 브랜치의 내용을 병합
+base : 브랜치들의 공통되는 부모 버젼
+
 
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
