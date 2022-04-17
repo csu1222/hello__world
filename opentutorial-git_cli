@@ -22,13 +22,29 @@ git branch "new branch name" : make new branch
 merge commit: 각자 다른 브랜치를 병합
 git merge "병합할 branch" : 현재 브랜치에 입력한 브랜치의 내용을 병합
 base : 브랜치들의 공통되는 부모 버젼
+git mergetool : 병합을 도와주는 툴을 설치하여 .gitconfig에 입력하면 사용할 수 있다.
 
 
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
 이것을 repository(저장소) 라고 합니다.
 
+2 way merge 와 3 way merge 예시 :
+기존 2 way merge 의 경유
+base commit 의 내용이 A, B, C, D 라고하면
+commit 1 이  A, 1, C, 1 이고 
+commit 2 가 A, B, 2, 2 라고 할 때 commit 1과 commit 2 를 merge 하면 
+A, confilct, confilct, conflict 가 됩니다, 
+3 way merge 의 경우 위와 같은 상태에서 merge 를 하면 
+첫번째 내용의 A는 세 버젼이 서로 같으므로 A
+두번째 내용의 B는 base 와 commit 2 가 B로 같고 commit 1 은 1 이므로 내용 B에서 1로 수정한것으로 판단되고 1로 수정됩니다.
+세번째 내용도 base와 commit 1 이 같고 commit 2 가 다르므로 commit 2의 내용으로 수정되어서 2
+네번째의 경우는 3 버전의 내용이 전부 다르기 때문에 conflict 가 일어나서 직접 수정해야합니다
+
 diff tool  차이비교 툴
 branch 
 tag 커밋 id 대신 이름붙이는것
 backup
+git workflow - git flow 깃 모범사례
+cherry-pick  병합할 때 과거 브랜치를 골라서 병합할때 쓰는 툴
+rebase  
