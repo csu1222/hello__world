@@ -23,11 +23,21 @@ merge commit: 각자 다른 브랜치를 병합
 git merge "병합할 branch" : 현재 브랜치에 입력한 브랜치의 내용을 병합
 base : 브랜치들의 공통되는 부모 버젼
 git mergetool : 병합을 도와주는 툴을 설치하여 .gitconfig에 입력하면 사용할 수 있다.
-
-
+local repository : 현재 작업을 하고 있는 컴퓨터(저장소)
+remote repository : 작업을 push 해서 다른 장소에 데이터를 저장해놓을 컴퓨터 (저장소)
+clone : remote repository의 저장소를 별개의 local repository로 새로 복사하는 행위
+pull : remote repository 의 데이터를  local repository로 땡겨온다  <-> push
+git hosting : remote repository 를 제공 해주는 서비스
+--------------------------- MEMO -------------------------------
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
 이것을 repository(저장소) 라고 합니다.
+
+checkout 은 깃에서의 head를 옴기는 것이라고 할 수 있습니다. 
+
+head가 branch 에서 떨어져서 버젼을 직접 가리키고 있는상태를 detached 되있다 라고 합니다
+
+reset 은 head 가 branch를 가리키고 있는동안은 branch를 제어한다라고 할 수 있습니다. reset 으로 다른 branch 나 version 을 입력하면 head는 그대로 현재 branch에 있고 현재 branch의 working place 가 reset 뒤에 입력한 branch 나 version 으로 변경됩니다.
 
 2 way merge 와 3 way merge 예시 :
 기존 2 way merge 의 경유
@@ -41,6 +51,8 @@ A, confilct, confilct, conflict 가 됩니다,
 세번째 내용도 base와 commit 1 이 같고 commit 2 가 다르므로 commit 2의 내용으로 수정되어서 2
 네번째의 경우는 3 버전의 내용이 전부 다르기 때문에 conflict 가 일어나서 직접 수정해야합니다
 
+git hosting sevice 와 통신 하기 위해서 HTTP, SSH 라는 두 가지 통신 방법이 있는데 git3 backup 수업에서는 HTTP 방식으로 실습 했습니다.
+-------------------------------------------------------- KEYWORD -----------------------------
 diff tool  차이비교 툴
 branch 
 tag 커밋 id 대신 이름붙이는것
