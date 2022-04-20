@@ -1,4 +1,4 @@
-@ 용어: 
+ @ 용어: 
 git init : initialize repository
 .git : git repository
 git status : working tree status
@@ -28,6 +28,12 @@ remote repository : 작업을 push 해서 다른 장소에 데이터를 저장�
 clone : remote repository의 저장소를 별개의 local repository로 새로 복사하는 행위
 pull : remote repository 의 데이터를  local repository로 땡겨온다  <-> push
 git hosting : remote repository 를 제공 해주는 서비스
+git remote : add 한 remote repository 를 listing
+git remote add "naming remote" "remote repository URL"  : remote repository 를 add 하는 법
+git push [remote] : [remote] 에 local repository의 데이터를 업로드
+git clone "URL" [directory name] : 기본 지정되어있는 디렉토리에 URL의 remote를 clone 하거나 [directory name]에 remote를 clone
+git pull : remote의 데이터를 이 local에 당겨온다
+
 --------------------------- MEMO -------------------------------
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
@@ -60,3 +66,5 @@ backup
 git workflow - git flow 깃 모범사례
 cherry-pick  병합할 때 과거 브랜치를 골라서 병합할때 쓰는 툴
 rebase  
+SSH
+
