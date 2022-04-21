@@ -1,0 +1,9 @@
+<h2 id="article-h2">ajax</h2>
+    <input type="button" value="night" onclick="
+    daynighthandler(this)
+    "
+    >
+    <p>
+        <a href="https://opentutorials.org/course/1" target="_blank" title="생활코딩">
+        hello, ajax
+    </p>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>포트폴리오 - 홈</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="calculrator.js" defer>
+    </script>
+</head>
+<body>
+    <h1><a href="../index.html">포트폴리오</a></h1>
+    <div id="grid">
+
+    <ol>
+        <h2>목록</h2>
+        <li><a href="/calculator/calculator.html" class="saw">혼자 만들어본 계산기</a></li>
+        <li><a href="../2.html" class="saw" id="active">스파르타 코딩클럽 웹개발 종합(국비지원 강의)</a></li>
+        <li><a href="../3.html">생활코딩 WEB1</a></li>
+    </ol>
+        <div>
+             <div id="article">
+                <h2 id="article-h2">간단한 계산기 입니다.</h2>
+                <input type="button" value="night" onclick="
+                    daynighthandler(this)
+                    "
+                    ><br>
+                <!-- <table id="calculator">
+                    <tr>
+                        <th colspan="4">
+                            <input type="text" name="display" id="display" disabled>
+                        </th>
+                    </tr>
+                        <tr>
+                            <td colspan="2">AC</td>
+                            <td>←</td>
+                            <td class="button plus">/</td>
+                        </tr>
+                        <tr>
+                            <td class="button 4">1</td>
+                            <td class="button 5">2</td>
+                            <td class="button 6">3</td>
+                            <td class="button minus">*</td>
+                        </tr>
+                        <tr>
+                            <td class="button 1">4</td>
+                            <td class="button 2">5</td>
+                            <td class="button 3">6</td>
+                            <td class="button division">+</td>
+                        </tr>
+                        <tr>
+                            <td class="button clear">7</td>
+                            <td class="button">8</td>
+                            <td class="button equal">9</td>
+                            <td class="button multiple">-</td>
+                        </tr>
+                        <tr>
+                            <td>.</td>
+                            <td>0</td>
+                            <td colspan="2">=</td>
+                        </tr>
+                </table> -->
+                <div class="calculator-grid" id="claculator">
+                    <div class="output">
+                        <div data-previous-operand class="previous-operand"></div>
+                        <div data-current-operand class="current-operand"></div>
+                    </div>
+                    <button data-all-clear class="span-two">AC</button>
+                    <button data-delete>DEL</button>
+                    <button data-operation>÷</button>
+                    <button data-number>1</button>
+                    <button data-number>2</button>
+                    <button data-number>3</button>
+                    <button data-operation>*</button>
+                    <button data-number>4</button>
+                    <button data-number>5</button>
+                    <button data-number>6</button>
+                    <button data-operation>+</button>
+                    <button data-number>7</button>
+                    <button data-number>8</button>
+                    <button data-number>9</button>
+                    <button data-operation>-</button>
+                    <button data-number>.</button>
+                    <button data-number>0</button>
+                    <button data-equals class="span-two">=</button>
+                </div>
+            </div>
+            </div> 
+            </body>
+            </html>
+

@@ -1,0 +1,11 @@
+<h2 id="article-h2">생활코딩 WEB1</h2>
+    <input type="button" value="night" onclick="
+    daynighthandler(this)
+    "
+    >
+    <p>
+        <a href="https://opentutorials.org/course/1" target="_blank" title="생활코딩">
+        생활코딩(opentutorial)</a>은 유튜브에서 막연히 코딩취업같은걸 검색중에 알게된 곳입니다.
+        WEB1강의의 내용은 코딩시작과 html의 대한 내용이었습니다. html의 내용보다는 코딩의 의미, 
+        웹의 역사, 공부를 해 나갈 용기를 얻고 공부를 하는 태도를 다시 생각해보게 되었습니다.
+    </p>
