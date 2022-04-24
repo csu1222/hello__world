@@ -10,7 +10,8 @@ git log: show version
 git log --stat : show version with file list
 git diff : show changes
 git log -p : show version and diffent
-git checkout : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다, 브랜치도 checkout "브랜치 이름" 으로 이동한다
+git checkout : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다, 브랜치도 checkout "브랜치 이름" 으로
+ 이동한다
 git stash : 현재 Staging 영역에 있는 파일의 변경사항을 스택에 넣어둡니다. 
 git  stash pop : stash 명령어로 스택에 넣어둔 변경 사항을 적용하고, 스택에서 제거하여줍니다.
 git reset --hard: delete version
@@ -43,7 +44,8 @@ checkout 은 깃에서의 head를 옴기는 것이라고 할 수 있습니다.
 
 head가 branch 에서 떨어져서 버젼을 직접 가리키고 있는상태를 detached 되있다 라고 합니다
 
-reset 은 head 가 branch를 가리키고 있는동안은 branch를 제어한다라고 할 수 있습니다. reset 으로 다른 branch 나 version 을 입력하면 head는 그대로 현재 branch에 있고 현재 branch의 working place 가 reset 뒤에 입력한 branch 나 version 으로 변경됩니다.
+reset 은 head 가 branch를 가리키고 있는동안은 branch를 제어한다라고 할 수 있습니다. reset 으로 다른 branch 나 version 을 입력하면
+ head는 그대로 현재 branch에 있고 현재 branch의 working place 가 reset 뒤에 입력한 branch 나 version 으로 변경됩니다.
 
 2 way merge 와 3 way merge 예시 :
 기존 2 way merge 의 경유
@@ -58,6 +60,9 @@ A, confilct, confilct, conflict 가 됩니다,
 네번째의 경우는 3 버전의 내용이 전부 다르기 때문에 conflict 가 일어나서 직접 수정해야합니다
 
 git hosting sevice 와 통신 하기 위해서 HTTP, SSH 라는 두 가지 통신 방법이 있는데 git3 backup 수업에서는 HTTP 방식으로 실습 했습니다.
+
+cherry-pick : 여러 브랜치가 각자 작업을 진행하는중에 어느 특정 version의 diff를 현재 branch로 가져오는 git 명령어 
+(cherry 브랜치와 pick 브랜치로 실습하였습니다.)
 -------------------------------------------------------- KEYWORD -----------------------------
 diff tool  차이비교 툴
 branch 
