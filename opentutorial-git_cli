@@ -35,6 +35,8 @@ git push [remote] : [remote] 에 local repository의 데이터를 업로드
 git clone "URL" [directory name] : 기본 지정되어있는 디렉토리에 URL의 remote를 clone 하거나 [directory name]에 remote를 clone
 git pull : remote의 데이터를 이 local에 당겨온다
 git pull = git fetch + git merge FETCH_HEAD (참조 : https://opentutorial.org/course/3842/23969)
+pull request , merge request : git hosting 서비스에서 서로 다른 브랜치를 
+ merge 요청하는 행위 
 --------------------------- MEMO -------------------------------
 CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
 git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
