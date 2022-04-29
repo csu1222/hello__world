@@ -66,8 +66,9 @@ A, confilct, confilct, conflict 가 됩니다,
 
 git hosting sevice 와 통신 하기 위해서 HTTP, SSH 라는 두 가지 통신 방법이 있는데 git3 backup 수업에서는 HTTP 방식으로 실습 했습니다.
 
-cherry-pick : 여러 브랜치가 각자 작업을 진행하는중에 어느 특정 version의 diff를 현재 branch로 가져오는 git 명령어 
-(cherry 브랜치와 pick 브랜치로 실습하였습니다.)
+cherry-pick : 여러 브랜치가 각자 작업을 진행하는중에 어느 특정 version의 diff를 현재 branch로 가져오는 git 명령어. 우선  (cherry 브랜치와 pick 브랜치로 실습하였습니다.) 
+cherry-pick 의 conflict : 체리픽을 하기 위해서는 체리픽할 버젼의 변경점을 알아야 합니다. 변겅점을 찾아내는 방법은 3way merge를 이용합니다. 체리픽 할 
+버전의 바로 이전 버전을 base로 잡고 자신의 버전, 그리고 
 
 rebase :  rebase 할 branch 에서 시작 합니다. 
 git rebase <base로 삼을 branch>
