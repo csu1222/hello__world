@@ -90,7 +90,8 @@ rebase 의 conflict : rebase에 참여하는 버전은 현재 head가 위치하�
 명령하면 처음에 현재 head가 위치한 A에서 C로 head의 위치를 변경합니다.
 A와 B의 변경점을 찾고 C와 conflict가 됩니다. 가장 최근 A까지 반복 하면서 
 rebase를 합니다.
-
+rebase를 협업에서 사용할 때는 remote repository 에 공유 전에 local 에서만 
+사용해야합니다.
 -------------------------------------------------------- KEYWORD -----------------------------
 diff tool  차이비교 툴
 branch 
