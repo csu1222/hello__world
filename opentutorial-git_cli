@@ -82,6 +82,15 @@ git rebase <base로 삼을 branch>
 보이게끔 merge 효과를 낼 수 있습니다. * rebase 로 log 를 정리하는 것은 
 remote repository로 push 하기 전에 local repository 에서 정리 후 push
 합니다 ** merge 와 rebase 는 과정이 다를 뿐 결과는 같아야 합니다.
+
+rebase 의 conflict : rebase에 참여하는 버전은 현재 head가 위치하고 있는 
+버전을 A라고 하고 , head의 base가 되는 버전을 B, rebase로 새로운 base가
+ 될 버전을 C라고 하고  참여합니다. rebase가 동작하는 원리는 cherry-pick과
+ 조금 차이가 있습니다. rebase를 
+명령하면 처음에 현재 head가 위치한 A에서 C로 head의 위치를 변경합니다.
+A와 B의 변경점을 찾고 C와 conflict가 됩니다. 가장 최근 A까지 반복 하면서 
+rebase를 합니다.
+
 -------------------------------------------------------- KEYWORD -----------------------------
 diff tool  차이비교 툴
 branch 
