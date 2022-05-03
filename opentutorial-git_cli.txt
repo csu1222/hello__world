@@ -1,0 +1,104 @@
+ @ 용어: 
+git init : initialize repository
+.git : git repository
+git status : working tree status
+git add : add to stageing Area
+git commit : create version
+git commit -m : create version commit message on commad line
+git commit -am : create version before add tracked file
+git log: show version
+git log --stat : show version with file list
+git diff : show changes
+git log -p : show version and diffent
+git checkout : 버전 id 값이나 master를 뒤에 입력하면 해당 버전으로 working area 를 복구합니다, 브랜치도 checkout "브랜치 이름" 으로
+ 이동한다
+git stash : 현재 Staging 영역에 있는 파일의 변경사항을 스택에 넣어둡니다. 
+git  stash pop : stash 명령어로 스택에 넣어둔 변경 사항을 적용하고, 스택에서 제거하여줍니다.
+git reset --hard: delete version
+git revert : revert version not delete 위 부터 순차적으로 리버트 해야한다
+.gitignore : 파일의 이름을 적으면 그 파일을 버전관리에서 제외 한다
+git log --all --graph --oneline :깃로그를 모든 브랜치를 표시, 그래프로, 한줄로 표시한다
+git branch : show branch list
+git branch "new branch name" : make new branch
+merge commit: 각자 다른 브랜치를 병합
+git merge "병합할 branch" : 현재 브랜치에 입력한 브랜치의 내용을 병합
+base : 브랜치들의 공통되는 부모 버젼
+git mergetool : 병합을 도와주는 툴을 설치하여 .gitconfig에 입력하면 사용할 수 있다.
+local repository : 현재 작업을 하고 있는 컴퓨터(저장소)
+remote repository : 작업을 push 해서 다른 장소에 데이터를 저장해놓을 컴퓨터 (저장소)
+clone : remote repository의 저장소를 별개의 local repository로 새로 복사하는 행위
+pull : remote repository 의 데이터를  local repository로 땡겨온다  <-> push
+git hosting : remote repository 를 제공 해주는 서비스
+git remote : add 한 remote repository 를 listing
+git remote add "naming remote" "remote repository URL"  : remote repository 를 add 하는 법
+git push [remote] : [remote] 에 local repository의 데이터를 업로드
+git clone "URL" [directory name] : 기본 지정되어있는 디렉토리에 URL의 remote를 clone 하거나 [directory name]에 remote를 clone
+git pull : remote의 데이터를 이 local에 당겨온다
+git pull = git fetch + git merge FETCH_HEAD (참조 : https://opentutorial.org/course/3842/23969)
+pull request , merge request : git hosting 서비스에서 서로 다른 브랜치를 
+ merge 요청하는 행위 
+rebase : 같은 base를 가진 branch로 base를 옮겨서 merge의 효과와 log에서
+선형적으로 표현하는 방식
+
+--------------------------- MEMO -------------------------------
+CLI 상에서 git을 사용해 관리하고 싶은 위치에서 
+git init 을 입력하면 해당 디렉토리에 .git 이라는 숨겨져있는 폴더가 생성 되는데 
+이것을 repository(저장소) 라고 합니다.
+
+checkout 은 깃에서의 head를 옴기는 것이라고 할 수 있습니다. 
+
+head가 branch 에서 떨어져서 버젼을 직접 가리키고 있는상태를 detached 되있다 라고 합니다
+
+reset 은 head 가 branch를 가리키고 있는동안은 branch를 제어한다라고 할 수 있습니다. reset 으로 다른 branch 나 version 을 입력하면
+ head는 그대로 현재 branch에 있고 현재 branch의 working place 가 reset 뒤에 입력한 branch 나 version 으로 변경됩니다.
+
+2 way merge 와 3 way merge 예시 :
+기존 2 way merge 의 경유
+base commit 의 내용이 A, B, C, D 라고하면
+commit 1 이  A, 1, C, 1 이고 
+commit 2 가 A, B, 2, 2 라고 할 때 commit 1과 commit 2 를 merge 하면 
+A, confilct, confilct, conflict 가 됩니다, 
+3 way merge 의 경우 위와 같은 상태에서 merge 를 하면 
+첫번째 내용의 A는 세 버젼이 서로 같으므로 A
+두번째 내용의 B는 base 와 commit 2 가 B로 같고 commit 1 은 1 이므로 내용 B에서 1로 수정한것으로 판단되고 1로 수정됩니다.
+세번째 내용도 base와 commit 1 이 같고 commit 2 가 다르므로 commit 2의 내용으로 수정되어서 2
+네번째의 경우는 3 버전의 내용이 전부 다르기 때문에 conflict 가 일어나서 직접 수정해야합니다
+
+git hosting sevice 와 통신 하기 위해서 HTTP, SSH 라는 두 가지 통신 방법이 있는데 git3 backup 수업에서는 HTTP 방식으로 실습 했습니다.
+
+
+cherry-pick : 여러 브랜치가 각자 작업을 진행하는중에 어느 특정 version의 diff를 현재 branch로 가져오는 git 명령어. 우선  
+(cherry 브랜치와 pick 브랜치로 실습하였습니다.) 
+cherry-pick 의 conflict : 체리픽을 하기 위해서는 체리픽을 할 버젼의 변경점을 알아야 합니다. 변겅점을 찾아내는 방법은 
+3way merge를 이용합니다. 
+현재 위치 하고 있는 버전과 체리픽할 버젼 그리고 체리픽할 버전의 base 버전으로 3way merge을 이용합니다 3way  merge 를 
+처리할 때 mergetool 을 쓰면 
+더욱 편리 할 수 있다. (https://opentutorials.org/course/3843/24445)
+
+rebase :  rebase 할 branch 에서 시작 합니다. 
+git rebase <base로 삼을 branch>
+이렇게 입력하면 base로 삼을 branch에  rebase 할 branch의 가장 처음 버젼 
+부터 최신 버전 까지 차례로 commit 합니다. 그 결과 log 상에서 선형적으로 
+보이게끔 merge 효과를 낼 수 있습니다. * rebase 로 log 를 정리하는 것은 
+remote repository로 push 하기 전에 local repository 에서 정리 후 push
+합니다 ** merge 와 rebase 는 과정이 다를 뿐 결과는 같아야 합니다.
+
+rebase 의 conflict : rebase에 참여하는 버전은 현재 head가 위치하고 있는 
+버전을 A라고 하고 , head의 base가 되는 버전을 B, rebase로 새로운 base가
+ 될 버전을 C라고 하고  참여합니다. rebase가 동작하는 원리는 cherry-pick과
+ 조금 차이가 있습니다. rebase를 
+명령하면 처음에 현재 head가 위치한 A에서 C로 head의 위치를 변경합니다.
+A와 B의 변경점을 찾고 C와 conflict가 됩니다. 가장 최근 A까지 반복 하면서 
+rebase를 합니다.
+rebase를 협업에서 사용할 때는 remote repository 에 공유 전에 local 에서만 
+사용해야합니다.
+-------------------------------------------------------- KEYWORD -----------------------------
+diff tool  차이비교 툴
+branch 
+tag 커밋 id 대신 이름붙이는것
+backup
+git workflow - git flow 깃 모범사례
+cherry-pick  병합할 때 과거 브랜치를 골라서 병합할때 쓰는 툴
+rebase  
+SSH
+code review : gerrit
