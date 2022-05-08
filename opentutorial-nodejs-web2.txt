@@ -6,3 +6,37 @@ URL :  예시 URL
   :3000 부분은 port 라고 부릅니다. 한개의 컴퓨터(host)에 여러 서버가 있을 수 있습니다. 그 중 port 번호로 실행된 서버와 통신하기 위한 번호입니다.
   / 뒤에 main 부분은 path 입니다. host 컴퓨터 안에 있는 어떤 디렉토리의 어떤 파일인지를 가르킵니다.
   ?id=HTML&page=12 부분은 query string 입니다. 이 query string으로 앞부분의 서버에게 데이터를 전달 할 수 있습니다. 어떤 가령 id가 HTML인 파일을 원한다. 그리고 복수의 데이터를 전달하기 위해서는 & 으로 연결해줍니다. 다시 page는 12번을 원한다는 의미가 됩니다.
+
+  
+node.js 에서 url 추출하기 : 예시로 
+[protocol] ://[host]:[port]/[query string] 의 형태에서 query string 부분을 추출 하고 싶습니다. 일단 강의 예제 파일은 아래 와 같습니다.
+var http = require('http');
+var fs = require('fs');
+
+var app = http.createServer(function(request,response){
+    var _url = request.url;
+    console.log(_url);
+    if(_url == '/'){
+      _url = '/index.html';
+    }
+    if(_url == '/favicon.ico'){
+        response.writeHead(404);
+        response.end();
+        return;
+    }
+    response.writeHead(200);
+    response.end(fs.readFileSync(__dirname + _url);
+ 
+});
+app.listen(3000);
+
+위 코드에서 8번째 줄에 있는 console.log(_url); 의 출력 값이 콘솔 화면에 query string 부분을 출력 해주었습니다.  그리고 node.js의 기본 모듈인 url을 임포트 하고
+ 
+var url = require('url') 
+
+어플리케이션 안에 query string 을 분석하는 코드를 적습니다.
+
+var queryData = url.parse(_url, true).query;
+
+여기서 parse의 두번째 인수로 true를 주면 query data의 데이터형을 object 로 반환해주고인수가 false였으면 데이터형을 string으로 반환해준다고 합니다.
+그래서 console.log(queryData); 를 해보면 query string이 {... : ...}, {... : ...}같이 object로 콘솔에 출력됩니다. 
