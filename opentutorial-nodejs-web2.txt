@@ -95,3 +95,18 @@ if (url.parse(_url, true).pathname === '/' ) {
     response.end('NOT FOUND');
 }
 이런 식으로 유효한 path로 접근 했으면 pathname이 / 일 것이므로 본문을 표시 하려던 정보를 표시하고 그 이외에는 404코드와 'NOT FOUND' 라는 텍스트를 표시해주는 작업이었습니다.
+
+
+# 홈페이지 구현 - 아직 우리는 홈페이지 구현을 안하고 있었습니다. 이제 위에서 NOT FOUND 페이지 구현을 응용하여 쿼리스트링에 id값이 없는 홈페이지를 구현할 수 있습니다. 홈페이지와 목차에 있는 본문들과의 차이점은 path에 id 값을 가지고 있느냐 인데 이를 위해 
+var url = require('url');
+var queryData = url.parse(_url, true).query; 
+라는 queryData변수의 id 값을 조건문으로 구별 하겠습니다.
+일단 특이한 다른 path로 접근하는 것이 아니기 때문에 pathname이 '/'이면서 queryData.id 값을 봐야합니다.
+if (pathname === '/') {
+     if (queryData.id === undefined) {
+         '홈페이지의 내용'
+    }
+} else {
+    '다른 본문들의 내용'
+}
+이렇게 됩니다. 위와 같이 queryData.id 값이 없는 홈페이지라서 undefined 일 때로 조건을 걸면 구분이 되겠습니다.
