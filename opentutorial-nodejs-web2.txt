@@ -66,3 +66,32 @@ node args파일경로 seonguk
 같이 뒤에 seonguk 이라는 그냥 제 이름을 같이 입력하면 args파일이 출력해주던 배열에 세번째 값으로 seonguk 이라는 문자열을 주었습니다. 배열은 0, 1, 2 이런 순서로 인덱스가 부여되기 때문에 
 console.log(args[2]); 
 를 nodejs 로 실행하면 3번째 값인 seonguk 이 콘솔에 출력됩니다. 
+
+
+# Not Found page 구현 - 웹페이지에 허용되지 않은 경로로 접속했을 때 유효한 경로가 아니라는 걸 표시하는 기능을 구현합니다. not found 를 구현 하기위해서는 url 이 약속된 쿼리스트링을 가르키는지 아니면 약속되 있지 않은 경로를 가르키는지 알아야 하겠습니다. 위에서 queryData 변수가 있었는데요 그 변수는 이렇게 생겼습니다.
+var url = require('url');
+var queryData = url.parse(_url, true).query;  //_url은 node.js 에서 서버를 만들었을때 parameter 중 request를 사용해 request.url 한 변수 입니다.//
+이중 url.parse(_url, true) 를 콘솔로그 해보면 
+ Url {
+protocol: null,
+slashes: null,
+auth: null,
+host: null,
+port: null,
+hostname: null,
+hash: null,
+search: null,
+query: [Object: null prototype] {},
+pathname: '/',
+path: '/',
+href: '/'
+} 
+같은 값을 출력해주는데 이중 query 항목이 쿼리스트링을 따로 객체의 형태로 보여주고 path는 호스트와 포트 뒤 모든 path입니다. 그리고 pathname은 path 중 쿼리스트링을 제외한 문자열을 보여주는데 이 pathname 을 이용하여 잘못된 경로로 들어왔는지 판별 할 것 입니다. 
+javascript의 조건문을 사용하여
+if (url.parse(_url, true).pathname === '/' ) {
+    '웹페이지에 표시할 본문'
+} else {
+    response.writehead(404);
+    response.end('NOT FOUND');
+}
+이런 식으로 유효한 path로 접근 했으면 pathname이 / 일 것이므로 본문을 표시 하려던 정보를 표시하고 그 이외에는 404코드와 'NOT FOUND' 라는 텍스트를 표시해주는 작업이었습니다.
