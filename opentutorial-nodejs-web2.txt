@@ -110,3 +110,14 @@ if (pathname === '/') {
     '다른 본문들의 내용'
 }
 이렇게 됩니다. 위와 같이 queryData.id 값이 없는 홈페이지라서 undefined 일 때로 조건을 걸면 구분이 되겠습니다.
+
+
+# Node.js 에서 파일 목록 알아내기 - 웹 어플리케이션에서 파일의 목록들을 수정 할 때 수작업으로 파일 목록을 수정하기는 어려우니 node.js 의 기능으로 자동화 시키는 법을 알아보겠습니다. 구글에서 node js file list in directory 정도로 검색해본 결과 
+
+const testFolder = './data/';
+const fs = require('fs');
+
+fs.readdir(testFolder, (err, files) => {
+    console.log(files);
+});
+이런 형식이었습니다. fs를 리콰이어 하고  fs.readdir 메소드로  파일들이 있는 디렉토리를 첫 parameter로 주고 두번째 parameter는 error 와 디렉토리 안에 있는 파일의 파일명을 배열의 형태로 return 해주는 함수를 parameter 로 주게됩니다.
