@@ -138,3 +138,13 @@ fs.readdir(testFolder, (err, files) => {
     list = list + '</ol>';
 });
 
+# Node.js javascript의 function으로 중복된 코드 정리하기 - 만들고 있는 웹 어플리케이션에서 반복되는 코드가 있을 수 있습니다. 
+그럴때 function으로 중복되는 코드를 묶어서 관리하면 한 눈에 파악하기 더욱 쉬워질 것 입니다. 그러면 function으로 어떻게 코드들을 묶는가 하면
+
+function '함수이름' (parameter) {
+    [값을 리턴 하기 전에 여러 처리할 코드]    
+    return//반복되는 코드//
+}
+
+이렇게 함수를 만듭니다. parameter는 코드 안에 동적으로 반응 하는 부분이 있다면 필요한 부분입니다. [] 안에 처리할 코드는 
+만약 return 값을 내기 전에 어떤 처리가 필요할 경우 추가 할 수 있는 부분입니다.
