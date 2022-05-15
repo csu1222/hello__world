@@ -193,3 +193,24 @@ function slowfunc(callback){
 라는 코드에 callback이라는 인자에 위에 a라는 값이 함수인 변수를 넣으면 a변수를 함수로 실행되므로 A라는 값이 콘솔에 출력됩니다.
 이렇게 어떤 함수안에 인자로서 또 다른 함수를 사용하는것이 콜백이라고 이해했으나 아직 제대로 콜백의 효용이나 원리같은건 실감하지 못하고 있으므로 
 더욱 공부해봐야 겠습니다.
+
+# HTML form 태그 - HTML문법중에 form태그에 대해 공부해보겠습니다. form 태그는 사용자 입력 양식을 위한 태그라고 합니다. form 태그는 텍스트인풋 태그나
+체크박스 등 여러 입력을 위한 태그를 담을 수 있습니다. 실습으로 작성한 코드는 이렇습니다.
+<form action="http://localhost:3000/process_create" method="post">
+<p>
+    <input type="text" name="title">
+</p>
+<p>
+    <textarea name="description"></textarea>
+</p>
+<p>
+    <input type="submit">
+</p>
+</form>
+
+위쪽 두개의 text타입 input 태그와 textarea태그에는 name attribute가 각각 title과 description으로 값을 주었습니다. 
+그리고 submit 타입인 input 태그로 위의 title과 description의 데이터를 전송하는데 그때 form태그로 감싸여진 태그들을 묶어서 submit 하는걸로 보입니다.
+이제 form태그를 살펴보면 action이라는 속성의 값이 http://localhost:3000/process_create 라고 되어있는데 이 값으로 submit이 되는거 같습니다.
+또 이렇게 submit 되면 http://localhost:3000/process_create?title="타이틀"&description="본문" 이런 url로 이동 하게 됩니다.
+process_create뒤의 query string의 url 까지 전부 표시되면 이 경로로 여러 보안 문제가 발생할 수 있기 때문에 form태그의 method속성을 post 로 주면 
+query string 부분이 감춰진 상태의 url 로 이동됩니다. 만약 method속성을 따로 지정하지 않으면 get 값으로 지정 된다고 합니다.
