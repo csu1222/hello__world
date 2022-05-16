@@ -214,3 +214,35 @@ function slowfunc(callback){
 또 이렇게 submit 되면 http://localhost:3000/process_create?title="타이틀"&description="본문" 이런 url로 이동 하게 됩니다.
 process_create뒤의 query string의 url 까지 전부 표시되면 이 경로로 여러 보안 문제가 발생할 수 있기 때문에 form태그의 method속성을 post 로 주면 
 query string 부분이 감춰진 상태의 url 로 이동됩니다. 만약 method속성을 따로 지정하지 않으면 get 값으로 지정 된다고 합니다.
+
+# APP 글 생성 UI 만들기 - 위의 form태그를 이용하여 글 생성 UI를 만들어 보겠습니다. 본문에 어디서든 글 생성 UI로 갈 수 있게 눈에 잘 띄는 곳에 
+<a>create</a>의 링크 태그를 생성합니다. 또 링크에는 href(hypertext reference) 를 적어주어야 하죠
+<a href="/create">create</a> 정도로 href 속성을 주면 이제 pathname이 /create가 오는 경우에 글 생성 UI를 표시 하게끔 하면 되겠습니다.
+/create pathname은 ?id=HTML 같이 ?로 시작하는 query string이 아니기 때문에 else if 문을 적을 때 위치를 잘 확인 해야겠습니다.
+
+else if (pathname === '/create') {
+      fs.readdir('./data', function(error, filelist){
+        var title = 'WEB - CREATE';
+        var list = templateList(filelist)
+        var template = templateHTML(title, list, 
+        `
+        <form action="http://localhost:3000/process_create" method="post">
+          <p>
+              <input type="text" name="title" placeholder="title">
+          </p>
+          <p>
+              <textarea name="description" placeholder="description"></textarea>
+          </p>
+          <p>
+              <input type="submit" value="create">
+          </p>
+        </form>
+        `);
+    
+        response.writeHead(200);
+        response.end(template);
+      });
+    }  
+    이렇게 적절한 곳에 pathname이 /create인 경우의 조건문을 입력하고 readdir메소드는 글 생성 UI에서도 파일 리스트를 볼 수 있게 하기위해 
+    가져왔습니다. form태그에 action 속성의 값은 아직 처리하지 않은 부분입니다. title 이나 description에 placeholder라는 속성은 입력칸에 무엇을 
+    입력하면 되는지 정보를 주기위한 속성입니다.
