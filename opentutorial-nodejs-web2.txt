@@ -226,7 +226,7 @@ else if (pathname === '/create') {
         var list = templateList(filelist)
         var template = templateHTML(title, list, 
         `
-        <form action="http://localhost:3000/process_create" method="post">
+        <form action="http://localhost:3000/create_process" method="post">
           <p>
               <input type="text" name="title" placeholder="title">
           </p>
@@ -243,6 +243,32 @@ else if (pathname === '/create') {
         response.end(template);
       });
     }  
-    이렇게 적절한 곳에 pathname이 /create인 경우의 조건문을 입력하고 readdir메소드는 글 생성 UI에서도 파일 리스트를 볼 수 있게 하기위해 
-    가져왔습니다. form태그에 action 속성의 값은 아직 처리하지 않은 부분입니다. title 이나 description에 placeholder라는 속성은 입력칸에 무엇을 
-    입력하면 되는지 정보를 주기위한 속성입니다.
+이렇게 적절한 곳에 pathname이 /create인 경우의 조건문을 입력하고 readdir메소드는 글 생성 UI에서도 파일 리스트를 볼 수 있게 하기위해 
+가져왔습니다. form태그에 action 속성의 값은 아직 처리하지 않은 부분입니다. title 이나 description에 placeholder라는 속성은 입력칸에 무엇을 
+입력하면 되는지 정보를 주기위한 속성입니다.
+
+이제 이렇게 post방식으로 전송되는 데이터를 어떻게 받는지를 공부해보겠습니다. 
+var qs = require('querystring');
+
+    else if (pathname === '/create_process') {
+      var body = '';
+      request.on('data', function(data){
+        body += data;
+      });
+      request.on('end', function(){
+        var post = qs.parse(body);
+        var title = post.title;
+        var description = post.description;
+        console.log(post.title)
+      });
+      response.writeHead(200);
+      response.end('success');
+    }
+이런 코드로 post 데이터를 받아 보았습니다.  첫줄 부터 보면 일단 글 생성 UI에서 action속성의 경로가 create_process였으니 
+pathname이 '/create_process'인 경우로 조건문을 걸었습니다. 그다음은 빈문자열 변수인 body를 생성했고 http.createServer의 콜백함수의 인자중 
+request를 가져왔습니다. post 데이터는 사용자가 서버측으로 요청한 데이터기 때문입니다. 
+request.on의 첫번째 인자로 'data'라는 문자열을 주고 콜백함수의 인자도 data 인데 앞의 data랑 꼭 같을 필요는 없어 보입니다.
+request.on의 콜백 함수의 내용으로 빈 문자열 body에 data를 += 해주었습니다.
+그리고 다시 request.on에서 첫째 인자로 'end'라는 문자열을 주면 위 data의 처리가 다 끝난 경우를 뜻 하는거 같습니다. 둘째 인자로 콜백함수가 오고
+콜백함수 안에서 데이터를 처리를 하는데 post라는 변수를 선언하고 querystring모듈의 parse 메소드에 위에서 처리하던 body를 인자로 주었습니다.
+이 post변수를 콘솔로그 해보면 {title: '제목', description: '본문'} 같은 형태로 출력이 됩니다. 각각 title과 description이라는 변수에 각 값을 담았습니다.
