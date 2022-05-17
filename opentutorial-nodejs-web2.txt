@@ -272,3 +272,33 @@ request.on의 콜백 함수의 내용으로 빈 문자열 body에 data를 += 해
 그리고 다시 request.on에서 첫째 인자로 'end'라는 문자열을 주면 위 data의 처리가 다 끝난 경우를 뜻 하는거 같습니다. 둘째 인자로 콜백함수가 오고
 콜백함수 안에서 데이터를 처리를 하는데 post라는 변수를 선언하고 querystring모듈의 parse 메소드에 위에서 처리하던 body를 인자로 주었습니다.
 이 post변수를 콘솔로그 해보면 {title: '제목', description: '본문'} 같은 형태로 출력이 됩니다. 각각 title과 description이라는 변수에 각 값을 담았습니다.
+
+현재 VSC에서 querystring을 쓰면 취소선이 그어져 있어서 왜 그런지 찾아 보니까 요즘은 querystring대신 
+var title = new URLSearchParams(body).get('title');
+var description = new URLSearchParams(body).get('description');
+처럼 new URLSearchParams 를 쓰고 있었습니다. 하지만 querystring으로 실습해도 정상작동 하기 떄문에 이번 실습에서는 강의를 따라가기위해서 일단 querystring을 쓰려고 합니다.
+
+그럼 이제 타이틀과 본문 변수를 만들었으니 이걸 가지고 새로운 파일을 쓰는 방법을 배워보겠습니다. 파일을 관리하는 방법이니깐 readfile 이나 readdir 같이 FileSystem의 메소드중 하나 일 것입니다.
+공식문서에서 찾아보니 writefile메소드가 있었습니다. 
+fs.writefile('파일이름', '파일내용',[옵션,] 콜백)
+이런 형태로 사용 하면 된다고 하네요 
+
+        fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
+          response.writeHead(200);
+          response.end('success');
+        });
+
+첫번째 인자는 현재 서버를 돌리는 디렉토리에 있는 data 디렉토리에 파일을 모아 두고 title의 입력 내용에 따라 동적으로 작동하도록 인자를 주었습니다.
+두번째 인자는 description변수를 입력대로 동적으로 주었고 세번째 인자는 옵션으로 utf-8 형식으로 인코딩 하기 위한 인자입니다.
+네번째 인자로 콜백이 왔습니다. 콜백함수의 err 인자는 파일 작성중 에러가 일어날 때를 위한 인자지만 현재 실습에서는 예외처리는 배우지 않았고 이후에 보충하도록 하겠습니다.
+콜백 함수의 내용으로 response.writehead와 response.end를 주었습니다. 실행해보면 data 디렉토리에 파일이름이 title이고 내용이 description인 파일이 생성되었고 웹페이지는 
+/create_process 경로이고 body는 success인 페이지로 이동해 있습니다. 
+
+이 상태보다는 파일 생성후 바로 해당 파일을 웹에서 볼 수 있는 상태로 하고 싶을떄 redirection을 하면 되는데 리다이렉션을 하는 방법은 
+        fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
+          response.writeHead(302, {location : `/?id=${title}`});
+          response.end();
+        });
+이렇게 콜백함수의 내용을 바꾸면 됩니다. 본래의 response.writehead(200)이라는 값은 웹이 성공적으로 작동했다는 코드이고 
+위 코드처럼 302 코드는 이번요청에 일시적으로 location의 주소로 리다이렉션 해준다는 코드라고 합니다. 또 location의 주소에 template string으로 ${title}값을 주면 생성한 파일이름과 같은 id값을 
+가진 페이지로 바로 갈 수 있게 되었습니다.

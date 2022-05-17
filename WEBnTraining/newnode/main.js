@@ -1,7 +1,8 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
-var qs = require('querystring')
+var qs = require('querystring');
+const { title } = require('process');
 
 function templateHTML(title, list, body){
   return`
@@ -93,10 +94,13 @@ var app = http.createServer(function(request,response){
         var post = qs.parse(body);
         var title = post.title;
         var description = post.description;
-        console.log(post.title)
+        /*var title = new URLSearchParams(body).get('title');
+        var description = new URLSearchParams(body).get('description');*/
+        fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
+          response.writeHead(302, {location : `/?id=${title}`});
+          response.end();
+        });
       });
-      response.writeHead(200);
-      response.end('success');
     } else {
       response.writeHead(404);
       response.end('NOT FOUND');
