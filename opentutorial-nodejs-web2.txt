@@ -302,3 +302,67 @@ fs.writefile('파일이름', '파일내용',[옵션,] 콜백)
 이렇게 콜백함수의 내용을 바꾸면 됩니다. 본래의 response.writehead(200)이라는 값은 웹이 성공적으로 작동했다는 코드이고 
 위 코드처럼 302 코드는 이번요청에 일시적으로 location의 주소로 리다이렉션 해준다는 코드라고 합니다. 또 location의 주소에 template string으로 ${title}값을 주면 생성한 파일이름과 같은 id값을 
 가진 페이지로 바로 갈 수 있게 되었습니다.
+
+# update 기능 구현 - 우리가 생성한 글을 수정할 수 있게 하고 싶습니다. 위에서 처럼 a 태그로 update 링크를 만들고 href로 /update를 주면 될거같습니다.
+거기에 update는 우리가 어떤 글을 수정하고 싶은지도 알아야 하니깐 /update?id=${title} 같이 어떤글을 수정 할지 정보도 필요할 것입니다.
+이제 pathname이  /update인 페이지를 만들겠습니다. 
+
+else if (pathname === '/update') {
+      fs.readdir('./data', function(error, filelist){
+        fs.readFile(`./data/${queryData.id}`, 'utf-8', function(err, description){
+          var title = queryData.id
+          var list = templateList(filelist)
+          var template = templateHTML(title, list, 
+            `
+            <form action="/update_process" method="post">
+              <p><input type="hidden" name="id" value="${title}"></p>
+              <p>
+                  <input type="text" name="title" value="${title}">
+              </p>
+              <p>
+                  <textarea name="description">${description}</textarea>
+              </p>
+              <p>
+                  <input type="submit" value="update">
+              </p>
+            </form>
+            `,
+            `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);
+      
+          response.writeHead(200);
+          response.end(template);
+        })
+    });
+    }
+
+이런 형식입니다. update페이지는 create페이지와 달리 수정하고자 하는 글의 제목과 본문이 있어야 하기 때문에 readfile메소드와 리스트를 표시하기위한
+readdir 둘다 필요합니다. create페이지에서 입력칸에 있던 placeholder속성 대신 수정 할 글의 제목과 본문을 넣어주었습니다.
+그리고 이후 수정한 내용을 nodejs로 우리 로컬 컴퓨터의 수정한 파일로 전송 할 텐데 우리는 해당 파일의 제목으로 구별해왔습니다. 하지만
+수정은 제목도 수정이 가능 할 것이기 때문에 수정된 제목으로 로컬컴퓨터에서 파일을 찾으면 일치하지 않을 것이기 때문에 이를 해결해야합니다.
+제목을 수정하고도 수정전 제목을 유지하는 태그를 하나 만들었는데 
+              <p><input type="hidden" name="id" value="${title}"></p>
+이 태그 입니다. name을 id로 주고 value는 수정전 제목과 같은 값을 줍니다. hidden이라고 하는 type으로 화면에 표시하지 않아서 수정할수 없도록 
+숨기지만 수정전 title 값은 간직하고 있도록 했습니다. 수정된 데이터를 보내준 경로도 처리해보겠습니다.
+
+else if (pathname === '/update_process'){
+      var body = '';
+      request.on('data', function(data){
+        body += data;
+      });
+      request.on('end', function(){
+        var post = qs.parse(body);
+        var id = post.id;
+        var title = post.title;
+        var description = post.description;
+        fs.rename(`data/${id}`, `data/${title}`, function(err){
+          fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
+            response.writeHead(302, {location : `/?id=${title}`});
+            response.end();
+          });
+        })
+      });
+
+    }
+  
+  이렇게 처리하였습니다.기본 골격은 create_process와 비슷하지만 데이터중에는 id 값도 있기때문에 post.id 값을 id변수에 담았고 
+  파일 이름을 바꾸는 fs.rename으로 파일이름을 바꾼뒤 fs.writefile로 파일 내용도 변경하였습니다. 그리고 나선 302 코드로 리다이렉션까지 해주었습니다.
