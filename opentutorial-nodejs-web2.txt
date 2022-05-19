@@ -366,3 +366,33 @@ else if (pathname === '/update_process'){
   
   이렇게 처리하였습니다.기본 골격은 create_process와 비슷하지만 데이터중에는 id 값도 있기때문에 post.id 값을 id변수에 담았고 
   파일 이름을 바꾸는 fs.rename으로 파일이름을 바꾼뒤 fs.writefile로 파일 내용도 변경하였습니다. 그리고 나선 302 코드로 리다이렉션까지 해주었습니다.
+
+  # delete 기능 구현 - CRUD중 마지막 delete를 구현해보겠습니다.우선 코드는 
+               `<a href="/create">create</a>
+               <a href="/update?id=${title}">update</a>
+               <form action="delete_process" method="post">
+                <input type="hidden" name="id" value="${title}">
+                <input type="submit" value="delete">
+               </form>`
+  삭제 버튼은 form으로 구현 하였는데요 위에서와 같이 생성, 수정과 같이 a태그로 구현했을 때의 문제점 때문인데요 
+  a태그로 구현시 쿼리스트링으로 삭제 처리를 하는 url이 노출되고 이 url을 다른 사람에게 공유하면 원하지 않던 데이터 삭제가 
+  일어날 수 있기 때문에 그렇다고 합니다. 그래서 수정페이지와 같이 form태그에서 post방식으로 삭제버튼을 만들었습니다.
+   else if (pathname === '/delete_process'){
+      var body = '';
+      request.on('data', function(data){
+        body += data;
+      });
+      request.on('end', function(){
+        var post = qs.parse(body);
+        var id = post.id;
+        /*var title = new URLSearchParams(body).get('title');
+        var description = new URLSearchParams(body).get('description');*/
+        fs.unlink(`data/${id}`, function(err){
+          response.writeHead(302, {location : `/`});
+          response.end();
+        })
+      });
+    }
+삭제처리는 이렇게 하였습니다. 기본적으로 update_process의 코드를 가져왔습니다. 다른점은 request.on의 end 처리에서 변수는 id값만 필요했고 
+rename과 writeFile대신 node.js의 파일 삭제 메소드인 unlink로 지울파일의 경로와 콜백 함수를 인자로 주었고 콜백처리에서는 
+홈으로 리다이렉션해주는 걸로 마무리 하였습니다.
