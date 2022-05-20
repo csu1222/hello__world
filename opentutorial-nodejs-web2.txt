@@ -444,3 +444,41 @@ for (var name in roles){
 이때 for문에서 roles의 item의 갯수만큼 item을 name이라는 변수에 하나씩 담으면서 {}안의 처리를 반복하는 javascript의 문법입니다. 
 이떄 name 변수에 담기는 것은 객체의 key 값 programmer, designer, manager 위치에 있는 key값을 담습니다.value값을 원하면 roles[name]로 
 value를 얻을 수 있었습니다.
+
+javascript 객체 값으로서의 함수 - javascript에서 function구문은 구문이기도 하면서 값이기도 합니다. 다른 구문들(if문, while문 등)
+은 값은 될 수 없고 구문으로만 사용할 수 있는데 그 예시로 
+var i = if(ture){console.log('if문')};
+var w = while(true){console.log('while문')};
+이런 코드가 있다고 치고 이 코드를 실행하면 syntax오류가 발생합니다. if문과 while문은 값이 아니기 때문이죠 
+하지만 javascript에서 function은 변수에 담을 수 있습니다.
+var f = function(){
+  console.log(1+1);
+  console.log(1+2);
+}
+var a = [f];
+a[0]();
+ 
+var o = {
+  func:f
+}
+o.func();
+이런 예제 코드에서 변수 f에 익명함수 1+1, 1+2를 콘솔로그하는 함수를 담았고 f()이렇게 변수뒤 괄호를 붙이면 함수를 실행하게 됩니다.
+또 a변수에서는 f를 배열방식으로 담았습니다. 그 뒤에서는 o라는 변수에 객체식으로 f를 처리 했습니다. 이렇게 function이 값으로서 
+다룰 수 있어서 프로그래밍하면서 좀 더 코드를 깔끔하게 정리 할 수 있었습니다.
+한가지 더 예시를 들자면
+var o = {
+  v1 : 'v1',
+  v2 : 'v2',
+  f1 : function(){
+    console.log(this.v1);
+  },
+  f2 : function(){
+    console.log(this.v2);
+  }
+}
+이런 예시에서 객체 o 안에 f1,f2 라는 property는 자기 자신 객체안에 있는 property를 호출하는 함수 입니다. 그때 
+객체의 이름을 써서 그냥 console.log(o.v1)이런 식으로 처리하면 객체의 이름이 바뀔때마다 함수는 바뀐 객체이름을 알고 있어야 하는데
+예시처럼 this라는 어떤 약속된 키워드를 쓰면 객체 자신을 가르키는 키워드로 작동합니다.
+이렇게 객체를 이용하여 코드를 유지보수하기 쉽고 보기쉽게 정리하는 것을 객체 지향 프로그래밍이라고 하는 것 같습니다.
+아주 기본적이고 기능 중심으로 객체 지향 프로그래밍을 배워보았습니다만 객체 지향 프로그래밍 줄여서 OOP(Object Oriented Programming)
+은 현재 아주 많은 서비스에서 다루고 있는 프로그래밍 방법론 이라고 알고 있습니다.
