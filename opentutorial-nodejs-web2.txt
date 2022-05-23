@@ -482,3 +482,46 @@ var o = {
 이렇게 객체를 이용하여 코드를 유지보수하기 쉽고 보기쉽게 정리하는 것을 객체 지향 프로그래밍이라고 하는 것 같습니다.
 아주 기본적이고 기능 중심으로 객체 지향 프로그래밍을 배워보았습니다만 객체 지향 프로그래밍 줄여서 OOP(Object Oriented Programming)
 은 현재 아주 많은 서비스에서 다루고 있는 프로그래밍 방법론 이라고 알고 있습니다.
+
+   객체로 코드를 리팩토링을 하면 더욱 효율적으로 코드를 관리할 수 있겠습니다. 예를들면
+var template = {
+  HTML : function(title, list, body, control){
+    return`
+    <!doctype html>
+    <html>
+    <head>
+      <title>WEB1 - ${title}</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <h1><a href="/">WEB</a></h1>
+      ${list}
+      ${control}
+      ${body}
+    </body>
+    </html>`;
+  },
+  List : function (filelist) {
+    var list = '<ul>';
+    var i = 0;
+    while (i < filelist.length){
+      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`
+  
+      i+=1
+    }
+    list = list + '</ul>';
+    return list;
+  }
+};
+이런 객체로 두가지 함수를 묶어서 관리 할 수 있겠습니다. 비슷한 역할을 하는 HTML함수와 List함수를 template라는 객체로 묶어 이 두 
+함수가 대략 어떤 역할을 하는지 알아보기 쉽게 하는것입니다. 처음 코드를 짤 때부터 완벽히 정리되어 있도록 짜기는 매우 어려운 일입니다.
+저와 같은 초보자, 입문자들은 투박하게 일단 기능할 수 있도록 부터 코드를 짜고 추후 어떤 공통점이 있는 코드들을 함수, 객체, 모듈로 
+정리하는 작업을 몇번이고 다시 거쳐가면서 코들를 다듬어 나갈 수 있도록 노력해야겠습니다. 이것이 refactoring 리펙토링 이라고 합니다.
+
+# 모듈화 - 코드가 길어지면 배열, 객체, 함수, 모듈 등으로 정리를 한다고 했습니다. 이중 가장 큰 개념이 모듈입니다. 모듈은 
+코드정리를 메인 어플이되는 파일 안에 정리만 하는 것이 아니라 일정 부분의 코드를 다른 파일로 빼서 정리하는 방법입니다.
+모듈화를 하는 방법은 모듈 파일을 만들고 그안에 
+module.exprot = (모듈화 할 코드들)
+이런 식으로 코드를 짜고 나서 모듈을 사용할 파일에서 
+var (모듈을 쓸 이름) = require('모듈파일이 있는 경로');
+이렇게 만든 모듈을 require 하고 지정한 모듈이름으로 사용하면 됩니다.
