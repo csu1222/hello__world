@@ -3,6 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
+var path = require('path');
 
 var app = http.createServer(function(request,response){
     var _url = request.url;
@@ -24,7 +25,8 @@ var app = http.createServer(function(request,response){
         });
       } else{
         fs.readdir('./data', function(error, filelist){
-          fs.readFile(`./data/${queryData.id}`, 'utf-8', function(err, description){
+          var FilteredId = path.parse(queryData.id).base;
+          fs.readFile(`./data/${FilteredId}`, 'utf-8', function(err, description){
             var title = queryData.id
             var list = template.List(filelist)
             var html = template.HTML(title, list, 
@@ -81,7 +83,8 @@ var app = http.createServer(function(request,response){
       });
     } else if (pathname === '/update') {
       fs.readdir('./data', function(error, filelist){
-        fs.readFile(`./data/${queryData.id}`, 'utf-8', function(err, description){
+        var FilteredId = path.parse(queryData.id).base;
+        fs.readFile(`./data/${FilteredId}`, 'utf-8', function(err, description){
           var title = queryData.id
           var list = template.List(filelist)
           var html = template.HTML(title, list, 
@@ -134,9 +137,10 @@ var app = http.createServer(function(request,response){
       request.on('end', function(){
         var post = qs.parse(body);
         var id = post.id;
+        var FilteredId = path.parse(id).base;
         /*var title = new URLSearchParams(body).get('title');
         var description = new URLSearchParams(body).get('description');*/
-        fs.unlink(`data/${id}`, function(err){
+        fs.unlink(`data/${FilteredId}`, function(err){
           response.writeHead(302, {location : `/`});
           response.end();
         })

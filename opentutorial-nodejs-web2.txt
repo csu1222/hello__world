@@ -525,3 +525,26 @@ module.exprot = (모듈화 할 코드들)
 이런 식으로 코드를 짜고 나서 모듈을 사용할 파일에서 
 var (모듈을 쓸 이름) = require('모듈파일이 있는 경로');
 이렇게 만든 모듈을 require 하고 지정한 모듈이름으로 사용하면 됩니다.
+
+# 보안 - 어플리케이션을 만들면서 신경쓸 곳중 보안도 있습니다. 매우 중요한 부분인데요 보안에 취약점이 있으면 서버의 모든 데이터를 
+볼 수 있거나 데이터를 마음대로 변경하거나 삭제하는 일도 가능합니다. 이번 강의에서는 간단한 보안의 예시로 node.js의 기본 모듈중 
+path모듈을 사용했습니다.
+path.parse('../password.js'); 
+라는 코드가 있다고하면 아래와 같은 객체를 반환해주는데요
+{
+  root: '',
+  dir: '..',
+  base: 'password.js',
+  ext: '.js',
+  name: 'password'
+}
+이 객체의 property중 base라고 하는 property의 값을 이용했습니다. 
+이용자가 root뒤에 ?id=../password.js/  이런 식으로 query string을 주었을때 보안을 생각하지 않으면 서버가 실행되는 디렉토리의 상위 디랙토리가 
+노출되지만 입력된 쿼리스트링을 
+
+    var queryData = url.parse(_url, true).query;
+    에서 queryData.id 로 id값을 path.parse().base 로 필터링을 합니다.
+    var FilteredId = path.parse(queryData.id).base; 
+
+라는 코드로 한번 필터링하게되면 ../password.js 로 접근해도 base 값인 password.js 만 걸러서 받게되어서 좀 더 안전해질수 있었습니다.
+이 필터링 작업을 파일 읽기로 노출되는것 뿐만 아니랑 수정과 삭제 쪽도 적용할 수 있었습니다.
