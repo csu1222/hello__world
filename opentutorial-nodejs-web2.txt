@@ -560,3 +560,52 @@ path.parse('../password.js');
 이런 파일을 일반 사용자가 무심코 열어보게되면 구글 사이트로 바로 리다리렉션되게 됩니다. 예시를 구글로 해서 그렇지 여러 위험한 
 코드를 적어놓았다면 불특정다수가 보안위험에 노출되는 것 입니다. 이런 문제를 해결하는 방법으로 두가지 정도 제시 해주셨는데
 script태그를 그냥 지우는 방법도 있고 script태그를 그냥 문자열로 인식하도록 하는 방법이 있겠습니다.
+
+직접 파일 하나씩 코드를 지우거나 변경하는 것은 현대 웹 어플리케이션에서는 너무 비효율적 일 것 입니다. 그래서 저는 이런 작업들을 
+해줄 수 있는 패키지를 이용하여 자동화 하려고 합니다. 그러면 위의 글처럼 파일들의 내용에서 특정 태그나 텍스트를 자동으로 삭제해주거나
+위험하지 않게 수정해주는 행위가 뭐라고 하는지 알아야 간편하게 필요한 패키지를 검색하여 자신의 어플리케이션에 적용할 수 있습니다.
+강의에서는 이런 기능을 살균(sanitize)이라고 알려주었습니다. node.js의 패키지 매니저인 npm 그리고 sanitize HTML 정도로 검색한 결과
+npm공식사이트에 sanitize-html이라는 패키지가 있었습니다. npm사이트에서는 검색한 패키지의 사용추이같은 지표들을 같이 알려주는데 
+이런 지표를 보고 이 패키지가 믿을만 한지 많은 사용자가 이용하고 있는지 판단하고 가져와 사용해야겠습니다.
+
+# npm - 프로젝트에서 npm을 사용해 다른 외부 패키지를 가져와 사용하기 위해서 처음 몇가지 작업을 배워보겠습니다.
+우선 npm init 이라는 명령어를 커맨드라인에 입력하면 커맨드라인이 지금 위치하고 있는 프로젝트 폴더를 관리하겠다는 의미인거 같습니다.
+initialize를 하고나면 프로젝트 폴더에 package.json 이라는 파일이 생성됩니다. 이 파일에서 npm으로 어떤 패키지를 사용하는지 기록해주는 
+거 같습니다. 
+  이제 위에서 찾아보았던 sanitize-html패키지를 설치할 차례입니다. 패키지를 설치할때는 기본적으로 
+npm install 
+로 시작하는데 뒤에 옵션을 -S 로주면 현제 프로젝트에서만 패키지를 부품으로 사용하겠다는 의미라고 합니다. 
+참고로 -g 라는 옵션은 global로 이 컴퓨터 전체에 적용되게 패키지를 사용하겠다는 의미라고 합니다.
+그래서 npm install -S sanitize-html
+이렇게 명령어를 주었습니다. 그 결과 제 프로젝트 폴더에 node_modules 라는 폴더가 생겼고 그 안에 여러가지 모듈들이 설치되었습니다.
+그리고 package.json파일에 dependencies(의존)항목에 sanitize-html이 입력되었고 이 프로젝트가 sanitize-html 패키지에 의존하고 있다는 
+것 입니다. 그리고 node_modules폴더의 많은 모듈,패키지들은 sanitize-html이 의존하거나 sanitize-html이 의존하고 있는 패키지가 의존하는 
+패키지들입니다. 이런 복잡한 관계성을 가진 패키지를 npm이 자동으로 관리해주는 것입니다.
+
+# sanitize-html - 이제 출력정보에 대한 보안문제로 돌아가서 어떻게 sanitize-html 패키지를 사용하는지 알아보겠습니다.
+npm 공식 페이지에서는 이렇게 사용하라고 적혀있는데요
+const sanitizeHtml = require('sanitize-html');
+
+const dirty = 'some really tacky HTML';
+const clean = sanitizeHtml(dirty);
+의미는 우선 패키지를 require로 불러오고 dirty 라는 문자열이 있다고 치면 sanitizeHtml(dirty) 로 clean 하게 한다는 의미 같습니다.
+이런 방식으로 프로젝트에서 예를 들어 
+title : dirty HTML
+description : this is dirty <script>alert('경고');</script> END.
+라는 파일로 보안문제가 생겼다고 했을 때 원래는 이 dirty HTML 파일을 열면 alert이 실행되어 경고창이 떴었습니다. 
+var sanitizedTitle = sanitizeHtml(title);
+var sanitizedDescription = sanitizeHtml(description);
+이렇게 살균하고나서 이 페이지를 열면 alert창은 안뜨고 그냥 this is dirty END.라는 텍스트만 출력되게 됩니다.
+브라우저의 소스코드 보기로 살펴봐도 그냥 텍스트만 있죠 하지만 로컬 디렉토리의 drity HTML은 아직 script태그가 남아있는걸 확인할 수 있었습니다.
+만약 script 태그 말고 h1태그를 사용하면 어떻게 될까요. script태그에서는 안의 alert이라는 명령어까지 삭제 하였지만 h1 태그는 
+안의 내용은 삭제하지않고 h1태그만 삭제하게 되어있었습니다. 그리고 sanitize할때 첫번째 인자로 살균할 내용을 주고 두번째 인자로 어떤 객체를 주면
+지정한 태그나 attribute등을 허용할 수 있습니다.
+const clean = sanitizeHtml(dirty, {
+  allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
+  allowedAttributes: {
+    'a': [ 'href' ]
+  },
+  allowedIframeHostnames: ['www.youtube.com']
+});
+이 예시에서는 ['b', 'i', 'em', 'strong', 'a'] 태그를 허용했고 a태그의 href attibute를 허용했습니다.또 호스트네임이 유튜브인
+삽입도 허용하였습니다. 이런식으로 상황에 따라 거르고 싶은 태그와 허용할 태그들을 선택적으로 적용도 가능 했습니다.
