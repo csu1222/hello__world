@@ -69,3 +69,74 @@ SHOW DATABASES 혹은 SHOW SCHEMAS
 명령어로 데이터베이스의 목록을 확인하고 어느 데이터베이스에서 테이블을 만들것 인지 정해야 하니 
 USE '데이터베이스의 이름'
 명령어로 사용할 데이터베이스로 이동할 수 있었습니다. 
+
+SQL과 테이블 구조 - 본격적으로 mysql을 배우기 앞서 SQL과 테이블구조에 대해 공부하고 나서 다음으로 진행 할 것입니다.
+SQL이란 Structured Query Language 의 약자 입니다. Structured는 관계형 데이터베이스에서 원하는 양식에 맞추어 표의 형태로 데이터를 정리
+한다고 했는데 이걸 유식해보이는 말로 '구조화', Structured 라고 합니다. Query는 이런 데이터를 생성하고 요청하고 수정하고 삭제하기위해 
+질의 한다는 의미의 Query입니다. Language는 앞서말한 내용을 컴퓨터와 사람이 서로 주고 받기위해 약속된 언어로써의 Language입니다.
+이런 SQL의 특징으로 쉽고 중요하다는 특징이 있습니다. HTML에 비견될 정도로 쉽고 또 현재 많은 비중을 차지하는 데이터베이스 방법인 
+관계형 데이터베이스를 다루기 위해 이 SQL이 표준적으로 사용되는 만큼 중요한 언어입니다.
+다음으로 테이블의 구조와 용어를 정리해보겠습니다.
+
+  id    title     description     create
+  1     MySQL     MySQL is ...    2022-06-02
+  2     Oracle    Oracle is ...   2022-06-03
+
+이런 테이블이 있다고 가정할때 가로로 x축 세로로 y축이 있습니다. 이때 x축을 row, record, 행 등으로 부릅니다. mysql에서는 row라는 표현을 
+많이 씁니다. y축을 부르는 용어로는 column, 열 등이 있습니다. 관계형 데이터베이스에서는 보통 column은 데이터 타입을 의미합니다.
+위의 예시에서 id, title, description, create 같은 정리된 데이터의 유형들 말입니다. 또 보통 row는 하나의 데이터 자체나 데이터들의 갯수
+를 의미하게 됩니다. 예시에서는 mysql, Oracle 같은 걸 말합니다.
+
+테이블의 생성 - 테이블을 만드는 작업에 대해 알아볼 것입니다. 제가 실습으로 표를 작성하면서 최종적으로 작성할 SQL 코드는 아래와 같습니다.
+CREATE TABLE topic(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NULL,
+    create DATETIME NOT NULL,
+    author VARCHAR(15) NULL,
+    profile VARCHAR(200) NULL,
+    PRIMARY KEY(id)
+);
+이 코드를 참고하여 각각의 코드가 어떤 역할을 하는지 알아볼것입니다. mysql 테이블을 만드는 치트시트를 검색해보면 간단히 정리한 테이블 생성 
+방법이 있습니다. 
+CREATE TABLE 테이블이름(
+    column1 datatype(length),
+    column2 datatype(length),
+    ...
+)
+이런 식으로 설명이 되어있는데요 만들 column을 순서대로 적어나가는 것 같습니다. 저는 첫 column을 id값을 주겠습니다. column 옆에는 
+datatype을 입력하라고 되어있습니다. 데이터베이스는 이렇게 column을 작성하면서 내용의 데이터 타입을 제한 할 수 있습니다. 그러면 
+서비스를 하면서 기상천외한 유형의 데이터가 섞이는걸 방지 할수 있게 됩니다. 저는 id의 데이터타입을 정수, 그래고 양수인 수로 하고 싶습니다. 
+해당하는 데이터타입은 INT(m)이라고 검색 되었습니다. 괄호 안의 m은 얼마까지 표현하는지를 의미한다고 합니다. 여기서는 11 정도로 주겠습니다.
+그리고 id값은 꼭 존재해야 해당 데이터를 수정하거나 삭제하거나 할 수 있습니다. 그래서 NOT NULL이라는 명령어를 주면 데이터가 없다는 NULL값을
+허용하지 않겠다는 뜻입니다. 그러면 id값이 없는 경우는 오류로써 걸러낼 수 있습니다. 다음은 OUTO_INCREMENT인데 이 명령어는 자동으로 값을 1씩
+더하기 한다는 의미로 id값을 중복되지않게 자동으로 부여하는 역할을 합니다. id값으로 데이터를 특정하여 수정하거나 삭제하는게 실수로 다른데이터를
+건드리지 않기 때문에 id값은 중복되지않게 유지해야하기 때문입니다.
+두번째 column은 title 입니다. 데이터타입은 문자열이구요 제목이 너무 길면 안될 것 같아 100글자 정도로만 제한하고 싶습니다. 또 제목이 null값이
+아니었으면 좋겠습니다.그래서 이렇게 입력 했습니다. title VARCHAR(100) NOT NULL 이라고 
+
+이중 데이터타입으로 VARCHAR를 주었는데 의미는 variable character 입니다. 비슷한 데이터타입으로 CHAR 가 있습니다. 두 타입의 차이로는 VARCHAR는 가변 문자열로 괄호로 일정 갯수 제한을 
+줬을 경우 입력한 문자열만큼의 문자데이터로 저장이 됩니다. 제한을 넘어가는 문자열이면 한계이후로의 데이터는 잘라냅니다. CHAR의 경우 갯수제한을 
+줄 수 있는것 까지는 비슷합니다. 하지만 만약 CHAR(50)일때 데이터 값으로 ABC 라는 문자를 저장하면 ABC이후 length가 50이 될 때까지 나머지 를
+빈 문자열로 채웁니다. 데이터를 가져올때는 공백을 제거하고 가져오긴 합니다.
+다음 column으로 description을 만들고 싶습니다. 본문의 경우 공백이라도 입력할수 있게 하고 싶습니다. 나중에 본문을 채워 넣을 경우도 있을거니까요
+또 VARCHAR나 CHAR는 문자입력이 255개 까지밖에 안됩니다. 본문은 더 긴 내용을 적을 수 있게 하고 싶어서 데이터 타입을 TEXT로 주었습니다. 그래서 
+description TEXT NULL 이렇게 적었습니다.
+다음 column은 create 데이터 생성 날짜 입니다. 데이터타입은 날짜와 시간이 오면 좋겠습니다. DATETIME으로 주고 생성 날짜가 공백일수 는 없을 것입니다.
+그래서 create DATETIME NOT NULL 입니다.
+다음 column은 author 작성자 입니다. 작성자는 가변문자열로 30자 정도면 될거같고 익명으로도 글을 쓸 수 있게 하고 싶습니다. 
+author VARCHAR(30) NULL 입니다.
+마지막으로 profile 작성자의 자기소개 입니다. 가변문자열 200 정도 주고 생략도 할 수 있을것 같습니다.
+profile VARCHAR(200) NULL 입니다.
+예시의 맨 아래에 있는 PRIMARY KEY(id)는 id column을 이 테이블의 주요 key로 정한것입니다. PRIMARY KEY값으로 지정함으로써 id값이 
+중복되지않도록 할 수 있습니다. primary key는 행을 고유하게 구분해주는 최소의 정보입니다. 모든 테이블에는 primary key가 있어야 하며,
+오직 하나의 primary key만 존재할 수 있습니다.
+
+// 위 처럼 실습하니깐
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'create DATETIME 
+NOT NULL,
+author VARCHAR(15) NULL,
+profile VARCHAR(200) NULL,
+PR' at line 5
+라는 오류가 발생했습니다. 네번째 column 이름을 create에서 createtime 으로 바꾸니 해결 되었습니다.
+그리고 테이블 생성 성공 메시지에 warning이 하나 있어서 찾아보니 첫째 colmn인 id 데이터타입으로 INT(11)를 썻는데 INT의 length 값이 mysql 8.0 버전이후로 안쓰일 예정이라고 합니다.
