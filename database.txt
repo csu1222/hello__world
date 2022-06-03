@@ -140,3 +140,24 @@ profile VARCHAR(200) NULL,
 PR' at line 5
 라는 오류가 발생했습니다. 네번째 column 이름을 create에서 createtime 으로 바꾸니 해결 되었습니다.
 그리고 테이블 생성 성공 메시지에 warning이 하나 있어서 찾아보니 첫째 colmn인 id 데이터타입으로 INT(11)를 썻는데 INT의 length 값이 mysql 8.0 버전이후로 안쓰일 예정이라고 합니다.
+
+
+CRUD - 정보기술에서 중요하게 여기는 CRUD를 배울 순서 입니다. 대부분의 정보기술과 다르게 데이터베이스에서는 CRUD의 중요도가 조금 다를 수 있습니다.
+Create는 정보를 생성해야 이후의 RUD가 의미가 있을 것입니다. Read는 생성한 데이터를 read하지 않으면 생성한 의미가 없을 것이구요 여기 까지는 다른 정보기술과 
+비슷하죠 하지만 다음 Update, Delete는 조금 다를 수도 있을 것입니다. 데이터베이스를 웹서비스나 게임등 CRUD모두 중요한 서비스가 있고 반면 연구나 역사같은 분야에 쓰이는
+데이터베이스인 경우 저장된 정보들을 수정하거나 삭제하면 오히려 문제가 생길 수 있죠 이런 데이터베이스의 특징에 의한 중요도 차이는 뒤로 하고 일단 CRUD를 하는
+방법자체는 모두 알아 둘 필요가 있습니다.
+
+Create(insert): 만들어 놓은 테이블에 정보를 입력하는 명령어는 검색 해보니 
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...);
+이런 형식이었습니다. 그리고 위처럼 column을 전부 적어야하는데 항상 외우고있기는 어려습니다. 그래서 'DESC table_name'라는 명령어를 
+입력하면 콘솔에 테이블의 column구조를 출력해줍니다. 보고 적으면 되겠습니다. 제가 입력했던 table의 column중 id값은 자동으로 1씩 증가하며
+입력되게 명령했었습니다. 그래서 id는 생략하고 title 부터 적었습니다.
+INSERT INTO topic (title, description, createtime, author, profile) VALUES ('woomirin', 'Seong and Jung', NOW(), 'Seong', '2nd son');
+이 명령어들중 createtime의 값에 해당하는부분에 NOW()라는 함수를 사용했습니다. 현재시간을 알려주는 함수 같습니다.
+
+Read(select): 만든 정보를 읽어보겠습니다. 
+SELECT * FROM topic; 
+이렇게 입력하면 읽을 정보를 선택한다(select), 모든 정보를(*), topic이라는 table로 부터(from)이런 의미인것 같습니다.
+여기서 모든 정보가 아닌 선택적으로 읽고 싶으면 * 부분에 필요한 colmn의 이름을 적어주면 되겠습니다.
