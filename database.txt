@@ -161,3 +161,18 @@ Read(select): 만든 정보를 읽어보겠습니다.
 SELECT * FROM topic; 
 이렇게 입력하면 읽을 정보를 선택한다(select), 모든 정보를(*), topic이라는 table로 부터(from)이런 의미인것 같습니다.
 여기서 모든 정보가 아닌 선택적으로 읽고 싶으면 * 부분에 필요한 colmn의 이름을 적어주면 되겠습니다.
+더 많은 INSERT 문법은 https://dev.mysql.com/doc/refman/8.0/en/insert.html 라는 mysql공식문서를 찾아보면 될것입니다.
+
+Update: 수정하는 법은 대강 이렇습니다.
+UPDATE table_name SET column_name=value[,...] WHERE id=id_value;
+우선 UPDATE명령어 뒤에 수정하고 싶은 테이블의 이름이 옵니다. SET 명령어로 수정할 column과 테이블 이름을 구문해주고 
+바꿀 column이름= 바꿀 값 을 입력합니다. 이뒤의 WHERE가 중요합니다. 만약 이 WHERE를 적지않았다면 table에 모든 row를 수정하게 됩니다.
+사고죠 그래서 WHERE로 어떤 row를 수정하고 싶은지 특정하는데 여기서는 PRIMARY KEY로 지정했던 id 값으로 특정했습니다. 이 id값 같이 
+다른 row들과 중복되지않는 column을 쓰는게 일반적 일것입니다. 마찬가지로 더욱 많은 기능들이 있지만 
+공식문서에서 필요할 때 천천히 찾아보면 되겠습니다.
+
+Delete(DELETE): 삭제하는 방법의 기본은 이렇습니다.
+DELETE FROM table_name WHERE id=id_value;
+대부분 위 update와 비슷하구요 여기서는 더욱 WHERE가 중요합니다. 실수로 WHERE없이 입력했다거나 잊어버리게 되면 이 table의 모든 row가 
+삭제되므로 주의해야합니다.
+여기까지 CRUD의 기본을 살펴보았습니다.
