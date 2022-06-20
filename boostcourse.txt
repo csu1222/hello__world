@@ -1317,3 +1317,127 @@ int main(int argc, char *argv[])
         printf("No\n");
     }
 }
+
+
+
+    6. 자료구조
+1) malloc과 포인터 복습
+데이터 구조를 이해하는데 메모리와 포인터의 개념이 정확히 이해하는게 중요하다고 합니다. 다시 복습해봅니다.
+
+int main(void)
+{
+    int *x;
+    int *y;
+
+    x = malloc(sizeof(int));
+
+    *x = 42;
+    *y = 13;
+}
+
+강의에서 이런 코드를 주고 여기에서 문제가 될 만한 부분을 찾아 보라고 하셨습니다. 
+제 나름대로 코드를 이해 해보자면 int타입을 받는 포인터 x, y를 선언 하였고 그 중 x에 malloc으로 int타입의 크기 만큼의 빈 메모리를 할당 
+해주었습니다. 그 후 x, y에 각각 42, 13이라는 int타입 데이터를 포인터가 가르키는 곳에 저장 하였습니다.
+교수님이 알려주신 것은 x에는 malloc으로 메모리를 확보 하였지만 y는 따로 메모리를 할당 받지 못한 것이 버그 라고 알려주셨습니다.
+
+2) 배열의 크기 조정하기
+
+포인트의 개념과 malloc으로 빈 메모리를 할당하고 값을 저장해봤습니다. 
+그리고 배열도 배웠습니다. 배열을 선언하면서 크기를 정하고 크기만큼 여러 값을 저장할 수 있었습니다.
+
+예를 들어 1,2,3라는 값들을 가진 배열을 만들었다고 했을때 나중에 4라는 값을 추가해 배열을 늘리고 싶습니다. 그렇다고 배열의 뒤쪽으로
+확장하여 4라는 값을 저장 하면 될것 같지만 그럴 수 없죠 왜냐하면 이미 이 3개크기의 배열의 주위는 다른 메모리 값들이 점유 하고 있을 것
+이기 때문입니다.
+ 이 문제를 해결하기위해 4바이트만큼의 메모리가 비어 있는곳으로 원래 배열의 요소들을 하나씩 복사한뒤 4를 추가합니다.
+그리고 원래 3바이트의 배열은 free로 메모리를 해제 하는 방법이 있겠습니다. 이 방법은 시간복잡도로 표현하면 O(n)의 시간이 듭니다. 
+이 방법을 코드로 표현해보면
+#include <stdio.h>
+#include <stdlib.h>  // malloc 과 free 함수가 있는 라이브러리
+
+int main(void)
+{
+    //int 자료형 3개로 이루어진 list 라는 포인터를 선언하고 메모리 할당
+    int *list = malloc(3 * sizeof(int));
+
+    // 포인터가 잘 선언되었는지 확인
+    if (list == NULL)
+    {
+        return 1;
+    }
+
+    // list 배열의 각 인덱스에 값 저장
+    list[0] = 1;
+    list[1] = 2;
+    list[2] = 3;
+
+    //int 자료형 4개 크기의 tmp 라는 포인터를 선언하고 메모리 할당
+    int *tmp = malloc(4 * sizeof(int));
+
+    if (tmp == NULL)
+    {
+        return 1;
+    }
+
+    // list의 값을 tmp로 복사
+    for (int i = 0; i < 3; i++)
+    {
+        tmp[i] = list[i];
+    }
+
+    // tmp배열의 네 번째 값도 저장
+    tmp[3] = 4;
+
+    // list의 메모리를 초기화
+    free(list);
+
+    // list가 tmp와 같은 곳을 가리키도록 지정
+    list = tmp;
+
+    // 새로운 배열 list의 값 확인
+    for (int i = 0; i < 4; i++)
+    {
+        printf("%i\n", list[i]);
+    }
+
+    // list의 메모리 초기화
+    free(list);
+}
+사실 이정도 길이의 코드에서는 처음 적었던 3개 짜리 배열을 지우고 4개짜리 배열로 다시 적으면 되지만 예시로써 작성하였습니다.
+이 코드를 간결하게 해주는 함수가 있습니다. realloc('배열이름', 바꿀 크기)
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    int *list = malloc(3 * sizeof(int));
+    if (list == NULL)
+    {
+        return 1;
+    }
+
+    list[0] = 1;
+    list[1] = 2;
+    list[2] = 3;
+
+    // tmp 포인터에 메모리를 할당하고 list의 값 복사
+    int *tmp = realloc(list, 4 * sizeof(int));
+    if (tmp == NULL)
+    {
+        return 1;
+    }
+
+    // list가 tmp와 같은 곳을 가리키도록 지정
+    list = tmp;
+
+    // 새로운 list의 네 번째 값 저장
+    list[3] = 4;
+
+    // list의 값 확인
+    for (int i = 0; i < 4; i++)
+    {
+        printf("%i\n", list[i]);
+    }
+
+    //list 의 메모리 초기화
+    free(list);
+}   
