@@ -1,0 +1,43 @@
+constructor : new function() 형태이고 함수의 내용에 따른 객체를 생성한다.
+**class 안에서 constructor 함수를 선언하면 객체를 생성할 때 constructor함수의 내용을 자동으로 실행 한다.
+
+prototype : constructor의 메소드를 추가해주는 문법으로 constructor 내부에 직접 메소드를 작성하면 생산 할 때 마다 속도상 메모리상 비효율이 발생하는걸 방지해준다 형태는 
+생성자함수.prototype.생성할메소드 = function(){}
+
+classes : ES6이상부터 지원하는 문법 이미 자바스크립트에서 가지고 있던 객체지향프로그래밍의 기능들을 다른 객체지향언어 (java, python 등) 과 호환가능하도록 해주는 조미료
+
+상속 inheritance : 의미는 클래스에 추가적인 메소드나 프로퍼티를 추가 하려하면서 원 클래스 (부모클래스)는 훼손하지않고 자식 클래스 로써 부모클래스의 기능들을 받아오는것
+필요성
+
+super : 자식클래스 안에서 부모클래스를 불러오는것 
+두가지 용법이 있습니다. 
+1 super() 부모클래스의 생성자를 불러오는것 
+2 super.메소드   이 용법에서는 부모클래스자체가 되는것
+필요성 클래스가 커져서 복잡성이 늘어났을때 만약 자식클래스에서 추가적인 인자를 넣고 싶다면  super없이는 부모클래스 전체를 복사해서 수정해야 하지만 
+super를 사용하여 많은 부분을 생략할수 있게됩니다. 상속으로 인한 이점을 잃지 않게 해줍니다.
+
+__proto__ : 자바스크립트의 원래 동작방식의 상속방법으로 위의 class 로 객체를 다루는 방법보다 자유롭지만 더 복잡성이 있을수 있는 방법
+형태는 superObject 와 subObject가 있다고 했을 때 
+subObject.__proto__ = superObject; 
+라고 하면 서브 객체가 슈퍼 객체를 상속 한 것입니다.
+
+object.create() : 위의 __proto__와 같은 작용을하는 코드입니다. 형태는
+var 서브객체 = object.create(슈퍼객체);
+이러면 슈퍼객체를 상속받은 객체를 생성하고 서브 객체만의 key:value를 다시 만들수 있습니다
+서브객체.서브키 = 서브밸류
+
+javascript 에서 function : 자바스크립트에서 함수는 여러 역할을 할 수 있습니다. 보통 함수로써의 역할과  함수 앞에 new 연산자를 붙이면 constructor의 역할도 하고 또 함수가 값이되여 객체의 메소드로도 작용합니다. 
+자바스크립트에서는 모든것이 객체이기 때문에 함수자체도 메소드가 있습니다.
+
+call() : call 은 개별 함수의 메소드로 옵니다. 함수의 메소드인 call의 배개변수로는 객체가 오고 함수가 매개변수로 온 객체의 메소드로 작동하게끔 해줍니다. 만약 함수에 매개변수가 있다면 call의 첫매개변수는 메소드가 될 객체고
+두번째 인자부터 함수의 매개변수가 옵니다. 형태는
+함수.call(객체 [ , 함수의 매개변수])
+
+bind() :bind()  bind는 call 처럼 호출할때마다 this를 변경하는 것이 아니라 내부적으로 고정시켜줍니다.
+bind는 호출받은 함수를 변경하는것이 아니라 인자로 받은 조건을 만족하는 새로운 함수를 리턴해줍니다.
+var 새로운 변수 = 함수.bind(객체 [, 함수의 매개변수]
+
+prototype vs __proto__ : 
+https://developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/Object_prototypes
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
+
