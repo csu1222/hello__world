@@ -20,7 +20,6 @@ var app = http.createServer(function(request,response){
           var html = template.HTML(title, list, 
           `<h2>${title}</h2><p>${description}</p>`,
           '<a href="/create">create</a>');
-      
           response.writeHead(200);
           response.end(html);
         });
