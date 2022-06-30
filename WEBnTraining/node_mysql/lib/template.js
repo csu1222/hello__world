@@ -16,15 +16,29 @@ module.exports = {
       </body>
       </html>`;
     },
-    List : function (filelist) {
+    List : function (topics) {
       var list = '<ul>';
       var i = 0;
-      while (i < filelist.length){
-        list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`
+      while (i < topics.length){
+        list = list + `<li><a href="/?id=${topics[i].id}">${topics[i].title}</a></li>`
     
         i+=1
       }
       list = list + '</ul>';
       return list;
+    },
+    Title : function(topics, queryData){
+      for (var i = 0; i < topics.length; i++){
+        if (topics[i].id == queryData.id){
+          return topics[i].title;
+        }
+      }
+    },
+    Description : function(topics, queryData){
+      for (var i = 0; i < topics.length; i++) {
+        if (topics[i].id == queryData.id){
+          return topics[i].description;
+        }
+      }
     }
   };
