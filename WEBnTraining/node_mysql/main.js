@@ -21,16 +21,6 @@ var app = http.createServer(function(request,response){
     var pathname = url.parse(_url, true).pathname;
     if (pathname === '/'){
       if (queryData.id === undefined){
-        // fs.readdir('./data', function(error, filelist){
-        //   var title = 'Welcome';
-        //   var description = 'hello node.js practice';
-        //   var list = template.List(filelist)
-        //   var html = template.HTML(title, list, 
-        //   `<h2>${title}</h2><p>${description}</p>`,
-        //   '<a href="/create">create</a>');
-        //   response.writeHead(200);
-        //   response.end(html);
-        // });
         db.query(`SELECT * FROM topic`, function(error, topics){
             var title = 'Welcome';
             var description = 'hello node.js practice';
@@ -42,65 +32,77 @@ var app = http.createServer(function(request,response){
           response.end(html);
         })
       } else{
-      //   fs.readdir('./data', function(error, filelist){
-      //     var FilteredId = path.parse(queryData.id).base;
-      //     fs.readFile(`./data/${FilteredId}`, 'utf-8', function(err, description){
-      //       var title = queryData.id;
-      //       var sanitizedTitle = sanitizeHtml(title);
-      //       var sanitizedDescription = sanitizeHtml(description);
-      //       var list = template.List(filelist)
-      //       var html = template.HTML(sanitizedTitle, list, 
-      //         `<h2>${sanitizedTitle}</h2><p>${sanitizedDescription}</p>`,
-      //         `<a href="/create">create</a>
-      //          <a href="/update?id=${sanitizedTitle}">update</a>
-      //          <form action="delete_process" method="post">
-      //           <input type="hidden" name="id" value="${sanitizedTitle}">
-      //           <input type="submit" value="delete">
-      //          </form>`);
-        
-      //       response.writeHead(200);
-      //       response.end(html);
-      //     })
-      // });
-        db.query(`SELECT * FROM topic`, function(error, topics){
-          var title = template.Title(topics, queryData);
-          var sanitizedTitle = sanitizeHtml(title);
-          var description = template.Description(topics, queryData);
-          var sanitizedDescription = sanitizeHtml(description);
-          var list = template.List(topics)
-          var html = template.HTML(sanitizedTitle, list, 
-                  `<h2>${sanitizedTitle}</h2><p>${sanitizedDescription}</p>`,
-                  `<a href="/create">create</a>
-                    <a href="/update?id=${sanitizedTitle}">update</a>
-                    <form action="delete_process" method="post">
-                    <input type="hidden" name="id" value="${sanitizedTitle}">
-                    <input type="submit" value="delete">
-                    </form>`);
-        response.writeHead(200);
-        response.end(html);
-      })
+         //생활코딩에서 알려주신 상세보기 페이지 구현
+        db.query(`SELECT * FROM topic`, function(error,topics){
+         if(error){
+           throw error;
+         }
+         db.query(`SELECT * FROM topic WHERE id=?`,[queryData.id], function(error2, topic){ 
+           if(error2){                  // mysql 라이브러리를 이용해서 구현하셨습니다. 
+             throw error2;
+           }
+          var title = topic[0].title;
+          var description = topic[0].description;
+          var list = template.List(topics);
+          var html = template.HTML(title, list,
+            `<h2>${title}</h2>${description}`,
+            ` <a href="/create">create</a>
+                <a href="/update?id=${queryData.id}">update</a>
+                <form action="delete_process" method="post">
+                  <input type="hidden" name="id" value="${queryData.id}">
+                  <input type="submit" value="delete">
+                </form>`
+          );
+          response.writeHead(200);
+          response.end(html);
+         })
+      });
       }
+      //   db.query(`SELECT * FROM topic`, function(error, topics){ // 제 나름대로 구현 해봤는데 어느쪽이 좋은지 모르겠습니다.
+      //     if (error) {
+      //       throw error;
+      //     }
+      //     console.log(queryData);
+      //     var title = template.Title(topics, queryData);
+      //     var sanitizedTitle = sanitizeHtml(title);
+      //     var description = template.Description(topics, queryData);
+      //     var sanitizedDescription = sanitizeHtml(description);
+      //     var list = template.List(topics)
+      //     var html = template.HTML(sanitizedTitle, list, 
+      //             `<h2>${sanitizedTitle}</h2><p>${sanitizedDescription}</p>`,
+      //             `<a href="/create">create</a>
+      //               <a href="/update?id=${sanitizedTitle}">update</a>
+      //               <form action="delete_process" method="post">
+      //               <input type="hidden" name="id" value="${sanitizedTitle}">
+      //               <input type="submit" value="delete">
+      //               </form>`);
+      //   response.writeHead(200);
+      //   response.end(html);
+      // })
+      // }
     }  else if (pathname === '/create') {
-      fs.readdir('./data', function(error, filelist){
+      db.query(`SELECT * FROM topic`, function(error, topics){
+        if (error) {
+          throw error;
+        }
         var title = 'WEB - CREATE';
-        var list = template.List(filelist)
-        var html = template.HTML(title, list, 
-        `
-        <form action="/create_process" method="post">
-          <p>
-              <input type="text" name="title" placeholder="title">
-          </p>
-          <p>
-              <textarea name="description" placeholder="description"></textarea>
-          </p>
-          <p>
-              <input type="submit" value="create">
-          </p>
-        </form>
-        `, '');
-    
-        response.writeHead(200);
-        response.end(html);
+        var list = template.List(topics);
+        var html = template.HTML(title, list,
+          `
+            <form action="/create_process" method="post">
+              <p>
+                  <input type="text" name="title" placeholder="title">
+              </p>
+              <p>
+                  <textarea name="description" placeholder="description"></textarea>
+              </p>
+              <p>
+                  <input type="submit" value="create">
+              </p>
+            </form>
+            `, '');
+            response.writeHead(200);
+            response.end(html);
       });
     } else if (pathname === '/create_process') {
       var body = '';
@@ -108,62 +110,59 @@ var app = http.createServer(function(request,response){
         body += data;
       });
       request.on('end', function(){
-        var post = qs.parse(body);
-        var title = post.title;
-        var description = post.description;
-        /*var title = new URLSearchParams(body).get('title');
-        var description = new URLSearchParams(body).get('description');*/
-        fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
-          response.writeHead(302, {location : `/?id=${title}`});
-          response.end();
-        });
+        var title = new URLSearchParams(body).get('title');
+        var description = new URLSearchParams(body).get('description');
+        db.query(`INSERT INTO topic (title, description, created, author_id) 
+                  VALUES (?, ?, NOW(), ?)`, [title, description, 1],
+                  function(error, result){
+                    if (error){throw error};
+                    response.writeHead(302, {location : `/?id=${result.insertId}`});
+                    response.end();
+                  })
       });
     } else if (pathname === '/update') {
-      fs.readdir('./data', function(error, filelist){
-        var FilteredId = path.parse(queryData.id).base;
-        fs.readFile(`./data/${FilteredId}`, 'utf-8', function(err, description){
-          var title = queryData.id
-          var list = template.List(filelist)
-          var html = template.HTML(title, list, 
+      db.query(`SELECT * FROM topic`, function(error, topics){
+        if (error) {
+          throw error;
+        }
+        db.query(`SELECT * FROM topic WHERE id=?`,[queryData.id],function(eroor2, topic){
+         
+          var title = topic[0].title;
+          var description = topic[0].description;
+          var list = template.List(topics);
+          var html = template.HTML(title, list,
             `
-            <form action="/update_process" method="post">
-              <p><input type="hidden" name="id" value="${title}"></p>
-              <p>
-                  <input type="text" name="title" value="${title}">
-              </p>
-              <p>
-                  <textarea name="description">${description}</textarea>
-              </p>
-              <p>
-                  <input type="submit" value="update">
-              </p>
-            </form>
-            `,
-            `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);
-      
-          response.writeHead(200);
-          response.end(html);
+              <form action="/update_process" method="post">
+              <p><input type="hidden" name="id" value="${queryData.id}"></p>
+                <p>
+                    <input type="text" name="title" value=${title}>
+                </p>
+                <p>
+                    <textarea name="description" >${description}</textarea>
+                </p>
+                <p>
+                    <input type="submit" value="update">
+                </p>
+              </form>
+              `, '');
+              response.writeHead(200);
+              response.end(html);
+        });
         })
-    });
     }else if (pathname === '/update_process'){
       var body = '';
       request.on('data', function(data){
         body += data;
       });
       request.on('end', function(){
-        var post = qs.parse(body);
-        var id = post.id;
-        var title = post.title;
-        var description = post.description;
-        fs.rename(`data/${id}`, `data/${title}`, function(err){
-          fs.writeFile(`data/${title}`, description, 'utf-8', function(err){
-            response.writeHead(302, {location : `/?id=${title}`});
-            response.end();
-          });
+        var id = new URLSearchParams(body).get('id');
+        var title = new URLSearchParams(body).get('title');
+        var description = new URLSearchParams(body).get('description');
+        db.query(`UPDATE topic SET title = ?, description = ?, author_id = 1 WHERE id = ?`,[title, description, id], function(error, topics){
+          if (error){throw error}
+          response.writeHead(302, {location : `/?id=${id}`});
+          response.end();
         })
-        /*var title = new URLSearchParams(body).get('title');
-        var description = new URLSearchParams(body).get('description');*/
-        
       });
 
     } else if (pathname === '/delete_process'){
@@ -172,12 +171,10 @@ var app = http.createServer(function(request,response){
         body += data;
       });
       request.on('end', function(){
-        var post = qs.parse(body);
-        var id = post.id;
-        var FilteredId = path.parse(id).base;
-        /*var title = new URLSearchParams(body).get('title');
-        var description = new URLSearchParams(body).get('description');*/
-        fs.unlink(`data/${FilteredId}`, function(err){
+        var id = new URLSearchParams(body).get('id');
+        console.log("id : ", id)
+        db.query(`DELETE FROM topic WHERE id=?`, [id],function(error, topics){
+          if (error){throw error}
           response.writeHead(302, {location : `/`});
           response.end();
         })
