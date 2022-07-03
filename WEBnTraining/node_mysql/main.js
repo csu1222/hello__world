@@ -37,7 +37,7 @@ var app = http.createServer(function(request,response){
          if(error){
            throw error;
          }
-         db.query(`SELECT * FROM topic WHERE id=?`,[queryData.id], function(error2, topic){ 
+         db.query(`SELECT * FROM topic LEFT JOIN author ON topic.author_id=author.id WHERE topic.id=?`,[queryData.id], function(error2, topic){ 
            if(error2){                  // mysql 라이브러리를 이용해서 구현하셨습니다. 
              throw error2;
            }
@@ -45,7 +45,8 @@ var app = http.createServer(function(request,response){
           var description = topic[0].description;
           var list = template.List(topics);
           var html = template.HTML(title, list,
-            `<h2>${title}</h2>${description}`,
+            `<h2>${title}</h2>${description}
+            <p>by ${topic[0].name}</p>`,
             ` <a href="/create">create</a>
                 <a href="/update?id=${queryData.id}">update</a>
                 <form action="delete_process" method="post">
@@ -85,24 +86,31 @@ var app = http.createServer(function(request,response){
         if (error) {
           throw error;
         }
-        var title = 'WEB - CREATE';
-        var list = template.List(topics);
-        var html = template.HTML(title, list,
-          `
-            <form action="/create_process" method="post">
-              <p>
-                  <input type="text" name="title" placeholder="title">
-              </p>
-              <p>
-                  <textarea name="description" placeholder="description"></textarea>
-              </p>
-              <p>
-                  <input type="submit" value="create">
-              </p>
-            </form>
-            `, '');
-            response.writeHead(200);
-            response.end(html);
+        db.query(`SELECT * FROM author`,function(error2, authors){
+          if(error2){throw error2};
+          var tag = template.authorSelect(authors);
+          var title = topics[0].title
+          var list = template.List(topics);
+          var html = template.HTML(title, list,
+            `
+              <form action="/create_process" method="post">
+                <p>
+                    <input type="text" name="title" placeholder="title">
+                </p>
+                <p>
+                    <textarea name="description" placeholder="description"></textarea>
+                </p>
+                <p>
+                  ${tag}
+                </p>
+                <p>
+                    <input type="submit" value="create">
+                </p>
+              </form>
+              `, '');
+              response.writeHead(200);
+              response.end(html);
+        });
       });
     } else if (pathname === '/create_process') {
       var body = '';
@@ -110,10 +118,11 @@ var app = http.createServer(function(request,response){
         body += data;
       });
       request.on('end', function(){
+        var author = new URLSearchParams(body).get('author');
         var title = new URLSearchParams(body).get('title');
         var description = new URLSearchParams(body).get('description');
         db.query(`INSERT INTO topic (title, description, created, author_id) 
-                  VALUES (?, ?, NOW(), ?)`, [title, description, 1],
+                  VALUES (?, ?, NOW(), ?)`, [title, description, author],
                   function(error, result){
                     if (error){throw error};
                     response.writeHead(302, {location : `/?id=${result.insertId}`});
@@ -125,8 +134,11 @@ var app = http.createServer(function(request,response){
         if (error) {
           throw error;
         }
-        db.query(`SELECT * FROM topic WHERE id=?`,[queryData.id],function(eroor2, topic){
-         
+        db.query(`SELECT * FROM topic WHERE id=?`,[queryData.id],function(error2, topic){
+         if (error2){throw error2};
+         db.query(`SELECT * FROM author`,function(error2, authors){
+          if (error2){throw error2}
+          var tag = template.authorSelect(authors, topic[0].author_id);
           var title = topic[0].title;
           var description = topic[0].description;
           var list = template.List(topics);
@@ -141,13 +153,16 @@ var app = http.createServer(function(request,response){
                     <textarea name="description" >${description}</textarea>
                 </p>
                 <p>
+                ${tag}
+                </p>
+                <p>
                     <input type="submit" value="update">
                 </p>
               </form>
               `, '');
               response.writeHead(200);
               response.end(html);
-        });
+        });});
         })
     }else if (pathname === '/update_process'){
       var body = '';
@@ -155,10 +170,12 @@ var app = http.createServer(function(request,response){
         body += data;
       });
       request.on('end', function(){
+        var author = new URLSearchParams(body).get('author');
         var id = new URLSearchParams(body).get('id');
         var title = new URLSearchParams(body).get('title');
         var description = new URLSearchParams(body).get('description');
-        db.query(`UPDATE topic SET title = ?, description = ?, author_id = 1 WHERE id = ?`,[title, description, id], function(error, topics){
+        db.query(`UPDATE topic SET title = ?, description = ?, author_id = ? WHERE id = ?`,[title, description, author, id],
+         function(error, topics){
           if (error){throw error}
           response.writeHead(302, {location : `/?id=${id}`});
           response.end();
@@ -172,7 +189,6 @@ var app = http.createServer(function(request,response){
       });
       request.on('end', function(){
         var id = new URLSearchParams(body).get('id');
-        console.log("id : ", id)
         db.query(`DELETE FROM topic WHERE id=?`, [id],function(error, topics){
           if (error){throw error}
           response.writeHead(302, {location : `/`});

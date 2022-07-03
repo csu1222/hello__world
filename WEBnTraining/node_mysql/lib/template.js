@@ -27,6 +27,21 @@ module.exports = {
       list = list + '</ul>';
       return list;
     },
+    authorSelect : function(authors, author_id){
+      var tag = '';
+          for (var i=0; i < authors.length;i++){
+            var selected = '';
+            if (authors[i].id === author_id) {
+              selected = ` selected`;
+            }
+            tag += `<option value="${authors[i].id}"${selected}>${authors[i].name}</option>`
+          }
+      return `
+      <select name="author">
+      ${tag}
+      </select>
+      `
+    },
     Title : function(topics, queryData){
       for (var i = 0; i < topics.length; i++){
         if (topics[i].id == queryData.id){
