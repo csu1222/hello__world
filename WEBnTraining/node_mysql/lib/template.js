@@ -10,6 +10,7 @@ module.exports = {
       </head>
       <body>
         <h1><a href="/">WEB</a></h1>
+        <a href="/author">author</a>
         ${list}
         ${control}
         ${body}
@@ -41,6 +42,31 @@ module.exports = {
       ${tag}
       </select>
       `
+    },
+    Table : function(authors){
+      var table = `<tr>
+                <th>name</th>
+                <th>profile</th>
+                <th></th>
+                <th></th>
+                <tr>`;
+      for (var i = 0; i < authors.length; i++){
+        table += `<tr>
+                <th>${authors[i].name}</th>
+                <th>${authors[i].profile}</th>
+                <th><a href="/author/update">update</a></th>
+                <th><a href="/author/delete_process">delete</a></th>
+                <tr>`
+      }
+      return `
+      <p>
+      <style>
+      table, th, td {border: 1px solid black;}
+      </style>
+      <table>
+      ${table}
+      </table>
+      </p>`
     },
     Title : function(topics, queryData){
       for (var i = 0; i < topics.length; i++){
