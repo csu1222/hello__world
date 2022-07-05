@@ -135,8 +135,8 @@ exports.update = function(request, response){
               response.writeHead(200);
               response.end(html);
         });});
-        })
-}
+        });
+};
 
 exports.update_process = function(request, response){
     var body = '';

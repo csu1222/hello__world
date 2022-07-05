@@ -7,9 +7,15 @@ module.exports = {
       <head>
         <title>WEB1 - ${title}</title>
         <meta charset="utf-8">
+        <style>
+          a {color : black;
+            text-decoration: none;}
+        </style>
       </head>
       <body>
-        <h1><a href="/">WEB</a></h1>
+        <h1>
+          <a href="/">WEB</a>
+        </h1>
         <a href="/author">author</a>
         ${list}
         ${control}
@@ -43,7 +49,7 @@ module.exports = {
       </select>
       `
     },
-    Table : function(authors){
+    authorTable : function(authors){
       var table = `<tr>
                 <th>name</th>
                 <th>profile</th>
@@ -54,19 +60,117 @@ module.exports = {
         table += `<tr>
                 <th>${authors[i].name}</th>
                 <th>${authors[i].profile}</th>
-                <th><a href="/author/update">update</a></th>
-                <th><a href="/author/delete_process">delete</a></th>
+                <th><a href="/author/update?id=${authors[i].id}">update</a></th>
+                <th>
+                  <form id="delete_id" action="/author/delete_process" method="post">
+                    <input type="hidden" name="id" value="${authors[i].id}">
+                    <input type="submit" value="delete">
+                  </form>
+                </th>
                 <tr>`
-      }
+      }//<a href="/author/delete_process" onclick="document.getElementById('delete_id').submit()">delete</a>
       return `
       <p>
       <style>
-      table, th, td {border: 1px solid black;}
+      table {border-collapse: collapse;}
+      table, th, td {border: 1px solid grey;}
       </style>
       <table>
       ${table}
       </table>
       </p>`
+    },
+    authorCreate : function(authors){
+      var table = `<tr>
+                <th>name</th>
+                <th>profile</th>
+                <th></th>
+                <th></th>
+                <tr>`;
+      for (var i = 0; i < authors.length; i++){
+        table += `<tr>
+                <th>${authors[i].name}</th>
+                <th>${authors[i].profile}</th>
+                <th><a href="/author/update?id=${authors[i].id}">update</a></th>
+                <th>
+                  <form id="delete_id" action="/author/delete_process" method="post">
+                    <input type="hidden" name="id" value="${authors[i].id}">
+                    <input type="submit" value="delete">
+                  </form>
+                </th>
+                <tr>`
+        }
+        var result = `<p>
+                      <style>
+                      table {border-collapse: collapse;}
+                      table, th, td {border: 1px solid grey;}
+                      </style>
+                      <table>
+                      ${table}
+                      </table>
+                      </p>`
+        result += `
+        <form action="/author/create_process" method="post">
+          <p>
+            <input type="text" name="name" placeholder="name">
+          </p>
+          <p>
+            <textarea name="profile" placeholder="profile"></textarea>
+          </p>
+          <p>
+            <input type="submit" value="author create">
+          </p>
+        </form>`
+        return result;
+    },
+    authorUpdate : function(authors, author_id){
+      var table = `<tr>
+                    <th>name</th>
+                    <th>profile</th>
+                    <th></th>
+                    <th></th>
+                  <tr>`;
+      for (var i = 0; i < authors.length; i++){
+        table += `<tr>
+                    <th>${authors[i].name}</th>
+                    <th>${authors[i].profile}</th>
+                    <th><a href="/author/update?id=${authors[i].id}">update</a></th>
+                    <th>
+                      <form id="delete_id" action="/author/delete_process" method="post">
+                        <input type="hidden" name="id" value="${authors[i].id}">
+                        <input type="submit" value="delete">
+                      </form>
+                    </th>
+                  <tr>`
+          if (authors[i].id == author_id){
+            var name = authors[i].name;
+            var profile = authors[i].profile;
+            var id = authors[i].id;
+          }
+        }
+        var result = `<p>
+                        <style>
+                          table {border-collapse: collapse;}
+                          table, th, td {border: 1px solid grey;}
+                        </style>
+                        <table>
+                          ${table}
+                        </table>
+                      </p>`
+        result += `
+          <form action="/author/update_process" method="post">
+            <input type="hidden" name="id" value="${id}">
+            <p>
+              <input type="text" name="name" value="${name}">
+            </p>
+            <p>
+              <textarea name="profile" >${profile}</textarea>
+            </p>
+            <p>
+              <input type="submit" value="author update">
+            </p>
+          </form>`
+        return result;
     },
     Title : function(topics, queryData){
       for (var i = 0; i < topics.length; i++){
