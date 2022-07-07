@@ -173,6 +173,23 @@ module.exports = {
           </form>`
         return result;
     },
+    SearchForm : function(){
+      var result = `<form action="/search" method="get">
+                      <span>
+                        <select name="about">
+                          <option value="title">title</option>
+                          <option value="author">author</option>
+                        </select>
+                      </span>
+                      <span>
+                        <input type="text" name="search_word">
+                      </span>
+                      <span>
+                        <input type="submit" value="search">
+                      </span>
+                    </form>`
+        return result;
+    },
     Title : function(topics, queryData){
       for (var i = 0; i < topics.length; i++){
         if (topics[i].id == queryData.id){

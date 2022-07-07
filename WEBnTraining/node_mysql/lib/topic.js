@@ -11,7 +11,8 @@ exports.home =function(request, response){
         var list = template.List(topics)
         var html = template.HTML(title, list, 
         `<h2>${title}</h2><p>${description}</p>`,
-        '<a href="/create">create</a>');
+        `<a href="/create">create</a> 
+        ${template.SearchForm()}`);
     response.writeHead(200);
     response.end(html);
 });
@@ -37,6 +38,7 @@ exports.content = function(request, response){
            <p>by ${sanitizeHtml(topic[0].name)}</p>`,
            ` <a href="/create">create</a>
                <a href="/update?id=${queryData.id}">update</a>
+               ${template.SearchForm()}
                <form action="delete_process" method="post">
                  <input type="hidden" name="id" value="${queryData.id}">
                  <input type="submit" value="delete">
@@ -171,4 +173,37 @@ exports.delete_process = function(request, response){
         response.end();
       })
     });
+}
+
+exports.search = function(request, response){
+  //생활코딩에서 알려주신 상세보기 페이지 구현
+  var _url = request.url;
+  var queryData = url.parse(_url, true).query;
+  if (queryData.about == 'title'){
+    db.query(`SELECT * FROM topic`, function(error,topics){
+      if(error){
+        throw error;
+      }
+      db.query(`SELECT * FROM topic LEFT JOIN author ON topic.author_id=author.id WHERE topic.title=?`,[queryData.search_word], function(error2, topic){ 
+        if(error2){                  // mysql 라이브러리를 이용해서 구현하셨습니다. 
+          throw error2;
+        } 
+        response.writeHead(302, {location : `/?id=${topic[0].id}`});
+        response.end();
+      })
+    });
+  } else if (queryData.about == 'author'){
+    db.query(`SELECT * FROM topic`, function(error,topics){
+      if(error){
+        throw error;
+      }
+      db.query(`SELECT * FROM topic LEFT JOIN author ON topic.author_id=author.id WHERE author.name=?`,[queryData.search_word], function(error2, topic){ 
+        if(error2){                  // mysql 라이브러리를 이용해서 구현하셨습니다. 
+          throw error2;
+        }
+        response.writeHead(302, {location : `/?id=${topic[0].id}`});
+        response.end();
+      })
+    });
+  };
 }
