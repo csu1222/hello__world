@@ -1,3 +1,4 @@
+var sanitizeHtml = require('sanitize-html');
 
 module.exports = {
     HTML : function(title, list, body, control){
@@ -27,7 +28,7 @@ module.exports = {
       var list = '<ul>';
       var i = 0;
       while (i < topics.length){
-        list = list + `<li><a href="/?id=${topics[i].id}">${topics[i].title}</a></li>`
+        list = list + `<li><a href="/?id=${topics[i].id}">${sanitizeHtml(topics[i].title)}</a></li>`
     
         i+=1
       }
@@ -41,7 +42,7 @@ module.exports = {
             if (authors[i].id === author_id) {
               selected = ` selected`;
             }
-            tag += `<option value="${authors[i].id}"${selected}>${authors[i].name}</option>`
+            tag += `<option value="${authors[i].id}"${selected}>${sanitizeHtml(authors[i].name)}</option>`
           }
       return `
       <select name="author">
@@ -58,8 +59,8 @@ module.exports = {
                 <tr>`;
       for (var i = 0; i < authors.length; i++){
         table += `<tr>
-                <th>${authors[i].name}</th>
-                <th>${authors[i].profile}</th>
+                <th>${sanitizeHtml(authors[i].name)}</th>
+                <th>${sanitizeHtml(authors[i].profile)}</th>
                 <th><a href="/author/update?id=${authors[i].id}">update</a></th>
                 <th>
                   <form id="delete_id" action="/author/delete_process" method="post">
@@ -89,8 +90,8 @@ module.exports = {
                 <tr>`;
       for (var i = 0; i < authors.length; i++){
         table += `<tr>
-                <th>${authors[i].name}</th>
-                <th>${authors[i].profile}</th>
+                <th>${sanitizeHtml(authors[i].name)}</th>
+                <th>${sanitizeHtml(authors[i].profile)}</th>
                 <th><a href="/author/update?id=${authors[i].id}">update</a></th>
                 <th>
                   <form id="delete_id" action="/author/delete_process" method="post">
@@ -132,8 +133,8 @@ module.exports = {
                   <tr>`;
       for (var i = 0; i < authors.length; i++){
         table += `<tr>
-                    <th>${authors[i].name}</th>
-                    <th>${authors[i].profile}</th>
+                    <th>${sanitizeHtml(authors[i].name)}</th>
+                    <th>${sanitizeHtml(authors[i].profile)}</th>
                     <th><a href="/author/update?id=${authors[i].id}">update</a></th>
                     <th>
                       <form id="delete_id" action="/author/delete_process" method="post">
@@ -161,10 +162,10 @@ module.exports = {
           <form action="/author/update_process" method="post">
             <input type="hidden" name="id" value="${id}">
             <p>
-              <input type="text" name="name" value="${name}">
+              <input type="text" name="name" value="${sanitizeHtml(name)}">
             </p>
             <p>
-              <textarea name="profile" >${profile}</textarea>
+              <textarea name="profile" >${sanitizeHtml(profile)}</textarea>
             </p>
             <p>
               <input type="submit" value="author update">

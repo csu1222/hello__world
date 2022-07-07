@@ -1,6 +1,7 @@
 var db = require('./db');
 var template = require('./template');
 var url = require('url');
+var sanitizeHtml = require('sanitize-html');
 
 
 exports.home =function(request, response){ 
@@ -32,8 +33,8 @@ exports.content = function(request, response){
          var description = topic[0].description;
          var list = template.List(topics);
          var html = template.HTML(title, list,
-           `<h2>${title}</h2>${description}
-           <p>by ${topic[0].name}</p>`,
+           `<h2>${sanitizeHtml(title)}</h2>${sanitizeHtml(description)}
+           <p>by ${sanitizeHtml(topic[0].name)}</p>`,
            ` <a href="/create">create</a>
                <a href="/update?id=${queryData.id}">update</a>
                <form action="delete_process" method="post">
@@ -55,7 +56,7 @@ exports.create = function(request, response){
         db.query(`SELECT * FROM author`,function(error2, authors){
           if(error2){throw error2};
           var tag = template.authorSelect(authors);
-          var title = topics[0].title
+          var title = sanitizeHtml(topics[0].title)
           var list = template.List(topics);
           var html = template.HTML(title, list,
             `
@@ -111,8 +112,8 @@ exports.update = function(request, response){
          db.query(`SELECT * FROM author`,function(error2, authors){
           if (error2){throw error2}
           var tag = template.authorSelect(authors, topic[0].author_id);
-          var title = topic[0].title;
-          var description = topic[0].description;
+          var title = sanitizeHtml(topic[0].title);
+          var description = sanitizeHtml(topic[0].description);
           var list = template.List(topics);
           var html = template.HTML(title, list,
             `
